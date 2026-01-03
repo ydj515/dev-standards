@@ -14,8 +14,8 @@
 
 1. 표준에 대한 versioning을 합니다.
    ```sh
-   git tag v1
-   git push origin v1
+   git tag v1.0.0
+   git push origin v1.0.0
    ```
 
 ## 1. gemini code review guidelines
