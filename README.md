@@ -38,6 +38,7 @@ dev-standards/
    ├─ base.md                 # 모든 프로젝트 공통 규칙
    ├─ languages/              # 언어별 가이드
    │  ├─ java.md
+   │  ├─ kotlin.md
    │  ├─ python.md
    │  └─ typescript.md
    └─ frameworks/             # (선택) 프레임워크별 가이드
