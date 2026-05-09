@@ -1,6 +1,6 @@
 # TypeScript Code Review Guidelines
 
-이 문서는 TypeScript 프로젝트에서 코드 리뷰 시 추가로 고려해야 할 규칙을 정리한 가이드입니다.  
+이 문서는 TypeScript 프로젝트에서 코드 리뷰 시 추가로 고려해야 할 규칙을 정리한 가이드입니다.
 목표는 타입 안정성, 가독성, 유지보수성, 런타임 안전성을 동시에 확보하는 것입니다.
 
 ---
@@ -156,7 +156,27 @@ type UserId = string & { readonly brand: unique symbol };
 
 ---
 
-## 11. TypeScript vs JavaScript 경계
+## 11. Runtime Validation & Boundary Parsing
+
+- 외부 입력(API 응답, 환경변수, localStorage, query string)을 타입 선언만으로 신뢰하지 않는지 확인
+- `as Foo` 단언으로 런타임 검증을 건너뛰고 있지 않은지 점검
+- zod, valibot, io-ts, custom parser 등으로 경계 입력을 좁히는 전략이 있는지 검토
+- 파싱 실패 시 fallback, error mapping, 로깅 정책이 명확한지 확인
+
+### 권장 패턴
+
+```ts
+const userSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+const user = userSchema.parse(payload);
+```
+
+---
+
+## 12. TypeScript vs JavaScript 경계
 
 - JS 라이브러리 래핑 시 타입 정의가 정확한지 확인
 - `@ts-ignore` 사용 사유가 정당한지 검토
@@ -164,11 +184,31 @@ type UserId = string & { readonly brand: unique symbol };
 
 ---
 
-## 12. Linting & Style Consistency
+## 13. Linting & Style Consistency
 
 - eslint / prettier 규칙과 충돌하지 않는지 확인
 - 팀 컨벤션 일관성 유지 여부 점검
 - unused 변수/타입 제거
+
+---
+
+## 14. TypeScript 안티패턴
+
+- `any`, 이중 단언(`as unknown as`), `@ts-ignore`로 타입 시스템을 우회하는 패턴
+- 외부 입력을 검증 없이 “타입만 맞는 것처럼” 단언해 사용하는 구현
+- 도메인 모델, API DTO, UI 상태를 모두 같은 느슨한 타입으로 섞어 쓰는 구조
+- boolean 플래그와 넓은 객체 타입으로 분기를 표현해 조합 폭발이 생기는 코드
+- 제네릭이 실제 재사용성을 높이지 못하고 오히려 호출부와 구현을 복잡하게 만드는 설계
+
+---
+
+## 15. TypeScript 좋은 패턴
+
+- discriminated union, branded type, `never` exhaustiveness로 상태 전이를 명확히 모델링하는 구조
+- 외부 입력은 런타임에 파싱하고 내부 로직은 좁혀진 타입만 다루는 방식
+- public API의 반환 타입과 에러 계약이 명확해 호출부가 안전하게 사용할 수 있는 구현
+- 얕고 읽기 쉬운 제네릭과 명확한 모듈 경계로 유지보수성을 높인 설계
+- 타입이 문서 역할을 하면서도 런타임 동작과 괴리되지 않는 코드
 
 ---
 

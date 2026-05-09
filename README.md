@@ -37,12 +37,18 @@ dev-standards/
 └─ gemini/
    ├─ base.md                 # 모든 프로젝트 공통 규칙
    ├─ languages/              # 언어별 가이드
+   │  ├─ go.md
    │  ├─ java.md
    │  ├─ kotlin.md
    │  ├─ python.md
    │  └─ typescript.md
    └─ frameworks/             # (선택) 프레임워크별 가이드
+      ├─ bootstrap.md
+      ├─ fastapi.md
+      ├─ mui.md
+      ├─ next-ts.md
+      ├─ react-ts.md
       ├─ spring.md
-      ├─ django.md
-      └─ nextjs.md
+      ├─ tailwind.md
+      └─ thymeleaf.md
 ```

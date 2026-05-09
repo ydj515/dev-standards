@@ -1,6 +1,6 @@
 # React + TypeScript Code Review Guidelines
 
-이 문서는 React(주로 함수형 컴포넌트) + TypeScript 프로젝트에서 코드 리뷰 시 추가로 고려해야 할 규칙을 정리한 가이드입니다.  
+이 문서는 React(주로 함수형 컴포넌트) + TypeScript 프로젝트에서 코드 리뷰 시 추가로 고려해야 할 규칙을 정리한 가이드입니다.
 목표는 **예측 가능한 상태 관리**, **렌더 성능**, **접근성**, **테스트 용이성**, **타입 안정성**을 함께 확보하는 것입니다.
 
 ---
@@ -168,6 +168,26 @@ useEffect(() => {
 - `React.FC` 강제 사용은 팀 정책에 따르되, 암묵적 children 포함 여부를 인지
 - `as unknown as ...` 같은 이중 단언은 마지막 수단 (대부분 설계/런타임 검증 문제)
 - `useState([])` 초기값 때문에 `never[]`/`any[]`로 추론되지 않도록 제네릭 부여 필요 여부 확인
+
+---
+
+## 14. React + TS 안티패턴
+
+- 파생 가능한 값을 state에 중복 저장하고 `useEffect`로 억지 동기화하는 구조
+- `div onClick`, index key, broad context value처럼 접근성/성능 문제를 동시에 만드는 패턴
+- `any` props, boolean 플래그 폭발, 이중 단언으로 타입 시스템을 우회하는 구현
+- 로딩/에러/빈 상태 없이 “성공 케이스 UI”만 존재하는 컴포넌트
+- API 호출, 가공, 렌더링, 부수효과가 한 컴포넌트에 몰린 비대한 구조
+
+---
+
+## 15. React + TS 좋은 패턴
+
+- props API가 좁고 명확하며 discriminated union으로 상태 조합을 제한하는 구조
+- 파생값은 렌더에서 계산하고, side effect는 명확한 hook이나 경계로 격리하는 방식
+- semantic HTML과 focus 관리, 로딩/에러/빈 상태를 포함한 접근성 중심 UI
+- 재사용 가능한 UI 컴포넌트와 feature-level 로직이 적절히 분리된 설계
+- 타입이 사용법을 강제하고 테스트가 행동 중심으로 작성되기 쉬운 구현
 
 ---
 
