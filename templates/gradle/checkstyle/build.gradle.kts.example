@@ -1,0 +1,24 @@
+import org.gradle.api.plugins.quality.Checkstyle
+
+plugins {
+    java
+    checkstyle
+}
+
+repositories {
+    mavenCentral()
+}
+
+checkstyle {
+    toolVersion = libs.versions.checkstyle.get()
+    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+    isIgnoreFailures = false
+    maxWarnings = 0
+}
+
+tasks.withType<Checkstyle>().configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}

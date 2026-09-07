@@ -1,0 +1,25 @@
+# Replace every REPLACE_ME value with a version verified by the consuming project.
+
+min_version = "REPLACE_ME"
+
+[tools]
+go = "REPLACE_ME"
+golangci-lint = "REPLACE_ME"
+
+[settings]
+lockfile = true
+
+[tasks.format]
+run = "golangci-lint fmt"
+
+[tasks.lint]
+run = "golangci-lint run"
+
+[tasks.test]
+run = "go test ./..."
+
+[tasks.test-race]
+run = "go test -race ./..."
+
+[tasks.verify]
+depends = ["lint", "test"]

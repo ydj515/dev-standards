@@ -1,0 +1,26 @@
+import com.github.spotbugs.snom.SpotBugsTask
+
+plugins {
+    java
+    alias(libs.plugins.spotbugs)
+}
+
+repositories {
+    mavenCentral()
+}
+
+val spotbugsToolVersion = libs.versions.spotbugs.engine
+
+spotbugs {
+    toolVersion.set(spotbugsToolVersion)
+    ignoreFailures = false
+    showProgress = true
+    runOnCheck = true
+    excludeFilter = rootProject.file("config/spotbugs/exclude-filter.xml")
+}
+
+tasks.withType<SpotBugsTask>().configureEach {
+    reports.create("html") {
+        required.set(true)
+    }
+}

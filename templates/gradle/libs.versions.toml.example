@@ -1,0 +1,21 @@
+# Replace every REPLACE_ME value with a version verified by the consuming project.
+
+[versions]
+kotlin = "REPLACE_ME"
+junit = "REPLACE_ME"
+checkstyle = "REPLACE_ME"
+pmd = "REPLACE_ME"
+spotbugs-engine = "REPLACE_ME"
+spotbugs-plugin = "REPLACE_ME"
+
+[libraries]
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+kotlin-test-junit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5", version.ref = "kotlin" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+
+[bundles]
+kotlin-test = ["kotlin-test-junit5", "junit-jupiter"]
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs-plugin" }

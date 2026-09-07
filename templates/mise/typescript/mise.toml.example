@@ -1,0 +1,38 @@
+# Replace every REPLACE_ME value with a version verified by the consuming project.
+# Keep pnpm aligned with package.json#packageManager.
+# The consuming package.json must define format, format:check, lint, typecheck, test, build,
+# and verify scripts. Select either Prettier or Biome for the format scripts.
+
+min_version = "REPLACE_ME"
+
+[tools]
+node = "REPLACE_ME"
+pnpm = "REPLACE_ME"
+
+[settings]
+lockfile = true
+
+[tasks.install]
+run = "pnpm install --frozen-lockfile"
+
+[tasks.lint]
+run = "pnpm run lint"
+
+[tasks.format]
+run = "pnpm run format"
+
+[tasks.format-check]
+run = "pnpm run format:check"
+
+[tasks.typecheck]
+run = "pnpm run typecheck"
+
+[tasks.test]
+run = "pnpm run test"
+
+[tasks.build]
+run = "pnpm run build"
+
+[tasks.verify]
+depends = ["install"]
+run = "pnpm run verify"

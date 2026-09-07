@@ -1,0 +1,18 @@
+# Replace every REPLACE_ME value with a version verified by the consuming project.
+
+min_version = "REPLACE_ME"
+
+[tools]
+java = "temurin-REPLACE_ME"
+
+[settings]
+lockfile = true
+
+[tasks.lint]
+run = "./gradlew check -x test"
+
+[tasks.test]
+run = "./gradlew test"
+
+[tasks.verify]
+run = "./gradlew check"

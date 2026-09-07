@@ -1,0 +1,25 @@
+import org.gradle.api.plugins.quality.Pmd
+
+plugins {
+    java
+    pmd
+}
+
+repositories {
+    mavenCentral()
+}
+
+pmd {
+    toolVersion = libs.versions.pmd.get()
+    ruleSets = emptyList()
+    ruleSetFiles = files(rootProject.file("config/pmd/ruleset.xml"))
+    isConsoleOutput = true
+    isIgnoreFailures = false
+}
+
+tasks.withType<Pmd>().configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}

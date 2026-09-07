@@ -1,0 +1,18 @@
+# Replace every REPLACE_ME value with a version verified by the consuming project.
+
+min_version = "REPLACE_ME"
+
+[tools]
+java = "temurin-REPLACE_ME"
+
+[settings]
+lockfile = true
+
+[tasks.lint]
+run = "./mvnw verify -DskipTests"
+
+[tasks.test]
+run = "./mvnw test"
+
+[tasks.verify]
+run = "./mvnw verify"

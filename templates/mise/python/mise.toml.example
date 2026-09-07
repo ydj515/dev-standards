@@ -1,0 +1,42 @@
+# Replace every REPLACE_ME value with a version verified by the consuming project.
+# This template assumes a committed uv.lock and pytest in the project's dev dependencies.
+
+min_version = "REPLACE_ME"
+
+[tools]
+python = "REPLACE_ME"
+uv = "REPLACE_ME"
+ruff = "REPLACE_ME"
+# Node.js is required by the official npm Pyright CLI below.
+node = "REPLACE_ME"
+"npm:pyright" = "REPLACE_ME"
+
+[env]
+UV_PYTHON = { value = "{{ tools.python.path }}", tools = true }
+
+[settings]
+lockfile = true
+python.uv_venv_auto = "create|source"
+
+[tasks.sync]
+run = "uv sync --frozen"
+
+[tasks.format]
+run = "ruff format ."
+
+[tasks.format-check]
+run = "ruff format --check ."
+
+[tasks.lint]
+run = "ruff check ."
+
+[tasks.typecheck]
+depends = ["sync"]
+run = "pyright"
+
+[tasks.test]
+depends = ["sync"]
+run = "uv run --frozen pytest"
+
+[tasks.verify]
+depends = ["format-check", "lint", "typecheck", "test"]

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- Add narrowly scoped Match entries only for generated or externally owned code. -->
+</FindBugsFilter>
