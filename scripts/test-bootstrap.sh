@@ -136,6 +136,34 @@ assert_absent "${conflict_dir}/AGENTS.md"
 assert_absent "${conflict_dir}/CLAUDE.md"
 assert_absent "${conflict_dir}/GEMINI.md"
 
+agents_only_dir="${TEST_ROOT}/agents-only"
+mkdir -p "${agents_only_dir}/.dev-standards"
+cat > "${agents_only_dir}/.dev-standards/config.yml" <<'YAML'
+version: 1
+languages: [go]
+runtimes: [mise]
+YAML
+printf 'project-owned editor settings\n' > "${agents_only_dir}/.editorconfig"
+printf 'project-owned runtime settings\n' > "${agents_only_dir}/mise.toml"
+
+run_bootstrap \
+  --config "${agents_only_dir}/.dev-standards/config.yml" \
+  --target "${agents_only_dir}" \
+  --manifest "${agents_only_dir}/manifest.txt" \
+  --agents-only
+
+for relative_path in AGENTS.md CLAUDE.md GEMINI.md; do
+  assert_file "${agents_only_dir}/${relative_path}"
+  grep -Fxq "${relative_path}" "${agents_only_dir}/manifest.txt" || \
+    fail "agents-only manifest missing ${relative_path}"
+done
+[[ "$(cat "${agents_only_dir}/.editorconfig")" == "project-owned editor settings" ]] || \
+  fail "agents-only bootstrap should preserve .editorconfig"
+[[ "$(cat "${agents_only_dir}/mise.toml")" == "project-owned runtime settings" ]] || \
+  fail "agents-only bootstrap should preserve mise.toml"
+[[ "$(wc -l < "${agents_only_dir}/manifest.txt" | tr -d ' ')" == "3" ]] || \
+  fail "agents-only manifest should contain only agent entry files"
+
 ambiguous_dir="${TEST_ROOT}/ambiguous"
 mkdir -p "${ambiguous_dir}/.dev-standards"
 cat > "${ambiguous_dir}/.dev-standards/config.yml" <<'YAML'

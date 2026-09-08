@@ -228,6 +228,16 @@ Ruby와 YAML gem 없이 Bash와 Python 3 표준 라이브러리만으로 실행�
   --target /path/to/project
 ```
 
+기존 프로젝트 설정을 건드리지 않고 누락된 agent 진입 파일만 만들려면
+`--agents-only`를 사용합니다.
+
+```sh
+./scripts/bootstrap.sh \
+  --config /path/to/project/.dev-standards/config.yml \
+  --target /path/to/project \
+  --agents-only
+```
+
 선택과 출력 파일의 기본 매핑은 다음과 같습니다.
 
 | 선택 | 소비 저장소 출력 |

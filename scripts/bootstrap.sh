@@ -7,6 +7,7 @@ TARGET_DIR="$(pwd)"
 MISE_PROFILE=""
 MANIFEST_FILE=""
 DRY_RUN="false"
+AGENTS_ONLY="false"
 
 show_help() {
   cat <<'EOF'
@@ -22,6 +23,7 @@ Options:
   --target <dir>          Consuming repository root (default: current directory)
   --mise-profile <name>   Resolve an ambiguous mise template: gradle, maven, go, python, typescript
   --manifest <file>       Write copied/selected repository-relative paths for callers such as CI
+  --agents-only           Copy only missing AGENTS.md, CLAUDE.md, and GEMINI.md entry files
   --dry-run               Validate and print the copy plan without changing the target repository
   -h, --help              Show this help
 EOF
@@ -52,6 +54,10 @@ while [[ $# -gt 0 ]]; do
     --manifest)
       MANIFEST_FILE="$2"
       shift 2
+      ;;
+    --agents-only)
+      AGENTS_ONLY="true"
+      shift
       ;;
     --dry-run)
       DRY_RUN="true"
@@ -96,7 +102,8 @@ python3 - \
   "${TARGET_DIR}" \
   "${MISE_PROFILE}" \
   "${MANIFEST_FILE}" \
-  "${DRY_RUN}" <<'PY'
+  "${DRY_RUN}" \
+  "${AGENTS_ONLY}" <<'PY'
 import filecmp
 import os
 import re
@@ -111,6 +118,7 @@ target_dir = Path(sys.argv[3]).resolve()
 mise_profile = sys.argv[4]
 manifest_path = Path(sys.argv[5]) if sys.argv[5] else None
 dry_run = sys.argv[6] == "true"
+agents_only = sys.argv[7] == "true"
 
 list_keys = {"languages", "architectures", "frameworks", "builds", "tools", "runtimes"}
 simple_value_pattern = re.compile(r"[A-Za-z0-9_.-]+")
@@ -194,10 +202,10 @@ def selection_values(data, key, legacy_key=None):
 
 
 data = parse_config()
-languages = selection_values(data, "languages", "language")
-builds = selection_values(data, "builds", "build")
-tools = selection_values(data, "tools")
-runtimes = selection_values(data, "runtimes", "runtime")
+languages = [] if agents_only else selection_values(data, "languages", "language")
+builds = [] if agents_only else selection_values(data, "builds", "build")
+tools = [] if agents_only else selection_values(data, "tools")
+runtimes = [] if agents_only else selection_values(data, "runtimes", "runtime")
 tool_names = [tool.rsplit("/", 1)[-1] for tool in tools]
 
 if {"prettier", "biome"}.issubset(set(tool_names)):
