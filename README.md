@@ -40,15 +40,17 @@ dev-standards/
 │  ├─ agents/                  # 루트 AGENTS.md, CLAUDE.md, GEMINI.md 시작점
 │  ├─ editorconfig/            # 범용 표준 .editorconfig
 │  ├─ biome/                   # TypeScript Biome 설정
+│  ├─ dependency-cruiser/      # React module dependency 규칙
 │  ├─ eslint/                  # ESLint flat config 예시
 │  ├─ golangci-lint/           # golangci-lint 설정 예시
 │  ├─ gradle/                  # Gradle Version Catalog 및 품질 도구 설정
 │  ├─ maven/                   # Maven pom.xml 예시
 │  ├─ mise/                    # 언어별 mise.toml 예시
 │  ├─ pnpm/                    # pnpm 및 workspace 설정
-│  ├─ prettier/                # Prettier 설정과 ignore
 │  ├─ pyright/                 # Pyright 타입 검사 설정
+│  ├─ prettier/                # Prettier 설정과 ignore
 │  ├─ ruff/                    # Ruff lint 및 format 설정
+│  ├─ vitest/                  # React test와 V8 coverage 설정
 │  └─ ...
 └─ scripts/
    ├─ compose.sh               # Bash와 Python 표준 라이브러리 기반 조합 스크립트
@@ -79,6 +81,8 @@ tools:
   - eslint
   - frameworks/react-ts/eslint-plugin-react-hooks
   - prettier
+  - frameworks/react-ts/dependency-cruiser
+  - frameworks/react-ts/vitest
   - pnpm
 runtimes:
   - mise
@@ -92,6 +96,7 @@ runtimes:
 - `builds`: `gradle`, `maven` 등 다중 선택
 - `tools`: `eslint`, `golangci-lint`, `ruff`, `pyright`, `prettier`, `biome`, `pnpm`,
   `detekt`, `checkstyle`, `pmd`, `spotbugs`, `frameworks/react-ts/eslint-plugin-react-hooks`,
+  `frameworks/react-ts/dependency-cruiser`, `frameworks/react-ts/vitest`,
   `frameworks/next-ts/eslint-config-next` 등 다중 선택
 - `runtimes`: `mise` 등 다중 선택
 
@@ -175,9 +180,21 @@ runtimes: [mise]
 
 일반 TypeScript 프로젝트는 `tools: [eslint, prettier, pnpm]` 조합이나
 `tools: [biome, pnpm]` 조합을 사용할 수 있습니다. React 프로젝트는 전자에
-`frameworks/react-ts/eslint-plugin-react-hooks`를 추가합니다. Next.js 프로젝트는
+`frameworks/react-ts/eslint-plugin-react-hooks`, `frameworks/react-ts/dependency-cruiser`,
+`frameworks/react-ts/vitest`를 추가합니다. Next.js 프로젝트는
 React Hooks 규칙을 포함하는 `frameworks/next-ts/eslint-config-next`를 선택하고 같은
 `eslint.config.mjs`에서 일반 TypeScript 규칙과 병합합니다.
+
+Java/Kotlin 품질 도구와 React/TypeScript 도구는 다음 책임으로 대응합니다. 이는 도구의
+내부 분석 방식이 동일하다는 뜻이 아니라 CI에서 같은 실패 범위를 소유한다는 뜻입니다.
+
+| Java/Kotlin 생태계 | React / TypeScript 대응 | 역할 |
+| --- | --- | --- |
+| Detekt / PMD | ESLint | 정적 분석, 코드 품질, 버그 패턴 탐지 |
+| Checkstyle / ktlint | ESLint + Prettier | 코딩 컨벤션 + 포맷팅 |
+| ArchUnit | dependency-cruiser / eslint-plugin-boundaries / Nx module boundaries | 아키텍처/레이어 의존성 검증 |
+| SpotBugs | ESLint + TypeScript compiler | 잠재 버그/타입 오류 |
+| JaCoCo | Vitest/Jest + V8/Istanbul coverage | 테스트 커버리지 |
 
 ---
 
@@ -252,11 +269,13 @@ Ruby와 YAML gem 없이 Bash와 Python 3 표준 라이브러리만으로 실행�
 | `tools: [spotbugs]` | `config/spotbugs/exclude-filter.xml` |
 | `tools: [golangci-lint]` | `.golangci.yml` |
 | `tools: [eslint]` | `eslint.config.mjs` |
+| `tools: [frameworks/react-ts/dependency-cruiser]` | `.dependency-cruiser.cjs` |
 | `tools: [prettier]` | `prettier.config.mjs`, `.prettierignore` |
 | `tools: [biome]` | `biome.json` |
 | `tools: [pnpm]` | `pnpm-workspace.yaml` |
 | `tools: [ruff]` | `ruff.toml` |
 | `tools: [pyright]` | `pyrightconfig.json` |
+| `tools: [frameworks/react-ts/vitest]` | `vitest.config.ts` |
 | `runtimes: [mise]` | `mise.toml` |
 
 framework별 ESLint 도구는 기존 `eslint.config.mjs`에 preset을 병합해야 하므로 독립 파일을

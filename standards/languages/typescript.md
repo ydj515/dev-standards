@@ -126,9 +126,23 @@ export async function loadOrder(orderId: OrderId): Promise<Order> {
 
 ## 7. 테스트와 품질 게이트
 
+- Java/Kotlin 생태계 도구를 이름이 아니라 책임으로 대응시킵니다.
+
+  | Java/Kotlin 생태계 | React / TypeScript 대응 | 역할 |
+  | --- | --- | --- |
+  | Detekt / PMD | ESLint | 정적 분석, 코드 품질, 버그 패턴 탐지 |
+  | Checkstyle / ktlint | ESLint + Prettier | 코딩 컨벤션 + 포맷팅 |
+  | ArchUnit | dependency-cruiser / eslint-plugin-boundaries / Nx module boundaries | 아키텍처/레이어 의존성 검증 |
+  | SpotBugs | ESLint + TypeScript compiler | 잠재 버그/타입 오류 |
+  | JaCoCo | Vitest/Jest + V8/Istanbul coverage | 테스트 커버리지 |
+
+- 이 표는 책임 대응이며 분석 단계가 같은 것은 아닙니다. TypeScript compiler는 JVM bytecode
+  분석을 대체하지 않고, `strict` typecheck와 type-aware ESLint를 조합해 유사한 오류 범위를
+  앞단에서 차단합니다.
 - compiler가 확인하는 타입 모양만 다시 테스트하지 말고 runtime parser, union 분기,
   async 실패와 공개 동작을 검증합니다.
 - type-level contract가 중요한 library는 compile fixture 또는 type test를 별도로 둡니다.
+- React 전용 architecture와 coverage 도구 선택은 `../frameworks/react-ts.md`를 따릅니다.
 - package script를 `mise run verify`의 단일 진입점에 연결합니다.
 
 ```sh
@@ -136,7 +150,8 @@ pnpm install --frozen-lockfile
 pnpm run format:check
 pnpm run lint
 pnpm run typecheck
-pnpm run test
+pnpm run imports:check
+pnpm run test:coverage
 pnpm run build
 ```
 

@@ -12,8 +12,11 @@
 현재 등록된 프레임워크 전용 도구는 다음과 같습니다.
 
 - `frameworks/react-ts/eslint-plugin-react-hooks`: React Hook과 render 규칙
+- `frameworks/react-ts/dependency-cruiser`: React module graph와 계층 의존 방향
+- `frameworks/react-ts/vitest`: React test와 V8 coverage gate
 - `frameworks/next-ts/eslint-config-next`: Next.js, React와 Core Web Vitals ESLint 규칙
 
-두 도구 모두 기존 `eslint.config.mjs`에 병합하는 설정이므로 독립 bootstrap 템플릿을
-두지 않습니다. 같은 target file을 자동 합성하지 않고 소비 저장소가 최종 config와 package
-버전을 소유합니다.
+ESLint framework 도구는 기존 `eslint.config.mjs`에 병합하는 설정이므로 독립 bootstrap
+템플릿을 두지 않습니다. 같은 target file을 자동 합성하지 않고 소비 저장소가 최종 config와
+package 버전을 소유합니다. dependency-cruiser와 Vitest는 각각 독립 설정 파일을 bootstrap할
+수 있지만, 대상 파일이 이미 있으면 자동 병합하거나 덮어쓰지 않습니다.

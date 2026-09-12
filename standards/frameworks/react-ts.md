@@ -149,12 +149,17 @@ interface OrderDialogProps {
 - reusable UI는 Storybook이 있으면 주요 state와 viewport를 story로 고정합니다.
 - root alias 검증과 계층 import rule을 CI에 연결하여 하위 계층의 역방향 import와 순환
   의존을 차단합니다.
+- 단일 저장소는 `tools/frameworks/react-ts/dependency-cruiser.md`, Nx workspace는
+  `@nx/enforce-module-boundaries`, 기존 ESLint 중심 경계는 `eslint-plugin-boundaries` 중 하나를
+  아키텍처 규칙의 원본으로 선택합니다.
 - `tools/frameworks/react-ts/eslint-plugin-react-hooks.md`를 일반 TypeScript ESLint 설정과
   함께 적용해 Hook 호출 순서와 Effect dependency를 정적 검증합니다.
+- `tools/frameworks/react-ts/vitest.md`에 따라 V8 coverage 대상과 threshold를 설정하고
+  `test:coverage`를 필수 CI 경로에 연결합니다.
 
 ```sh
 pnpm run imports:check
-pnpm run test:run
+pnpm run test:coverage
 pnpm run test-storybook
 pnpm run build
 ```

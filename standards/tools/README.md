@@ -11,7 +11,7 @@ tools/
 │  ├─ python/{ruff,pyright}.md
 │  └─ typescript/{eslint,prettier,biome,pnpm}.md
 └─ frameworks/
-   ├─ react-ts/eslint-plugin-react-hooks.md
+   ├─ react-ts/{eslint-plugin-react-hooks,dependency-cruiser,vitest}.md
    └─ next-ts/eslint-config-next.md
 ```
 

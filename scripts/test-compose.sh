@@ -51,7 +51,13 @@ base: true
 languages: [kotlin, typescript]
 frameworks: [spring, react-ts]
 builds: [gradle]
-tools: [detekt, eslint, prettier, pnpm]
+tools:
+  - detekt
+  - eslint
+  - prettier
+  - pnpm
+  - frameworks/react-ts/dependency-cruiser
+  - frameworks/react-ts/vitest
 runtimes: [mise]
 YAML
 
@@ -76,6 +82,8 @@ for relative_path in \
   tools/languages/typescript/eslint.md \
   tools/languages/typescript/prettier.md \
   tools/languages/typescript/pnpm.md \
+  tools/frameworks/react-ts/dependency-cruiser.md \
+  tools/frameworks/react-ts/vitest.md \
   runtime/mise.md; do
   assert_file "${consumer_dir}/.dev-standards/standards/${relative_path}"
   cmp -s \

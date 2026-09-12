@@ -247,6 +247,9 @@ for build in builds:
 tool_templates = {
     "biome": [("biome/biome.json.example", "biome.json")],
     "checkstyle": [("checkstyle/checkstyle.xml", "config/checkstyle/checkstyle.xml")],
+    "dependency-cruiser": [
+        ("dependency-cruiser/react-ts/.dependency-cruiser.cjs.example", ".dependency-cruiser.cjs")
+    ],
     "detekt": [("detekt/detekt.yml", "config/detekt/detekt.yml")],
     "eslint": [("eslint/typescript/eslint.config.mjs.example", "eslint.config.mjs")],
     "golangci-lint": [("golangci-lint/.golangci.yml.example", ".golangci.yml")],
@@ -259,6 +262,7 @@ tool_templates = {
     "pyright": [("pyright/pyrightconfig.json.example", "pyrightconfig.json")],
     "ruff": [("ruff/ruff.toml.example", "ruff.toml")],
     "spotbugs": [("spotbugs/exclude-filter.xml", "config/spotbugs/exclude-filter.xml")],
+    "vitest": [("vitest/react-ts/vitest.config.ts.example", "vitest.config.ts")],
 }
 for selector, tool_name in zip(tools, tool_names):
     for source_relative, target_relative in tool_templates.get(tool_name, []):

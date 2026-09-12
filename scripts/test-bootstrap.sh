@@ -44,7 +44,12 @@ version: 1
 base: true
 languages: [typescript]
 frameworks: [react-ts]
-tools: [eslint, prettier, pnpm]
+tools:
+  - eslint
+  - prettier
+  - pnpm
+  - frameworks/react-ts/dependency-cruiser
+  - frameworks/react-ts/vitest
 runtimes: [mise]
 YAML
 
@@ -59,9 +64,11 @@ for relative_path in \
   GEMINI.md \
   .editorconfig \
   eslint.config.mjs \
+  .dependency-cruiser.cjs \
   prettier.config.mjs \
   .prettierignore \
   pnpm-workspace.yaml \
+  vitest.config.ts \
   mise.toml; do
   assert_file "${react_dir}/${relative_path}"
   grep -Fxq "${relative_path}" "${react_dir}/manifest.txt" || fail "manifest missing ${relative_path}"
