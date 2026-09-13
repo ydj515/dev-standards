@@ -79,11 +79,9 @@ runtimes: [mise]
 
 ## 문서
 
+- [문서 전체 보기](docs/README.md)
 - [선택 설정과 architecture profile](docs/configuration.md)
-- [표준 조합과 동기화](docs/compose-and-sync.md)
 - [설정 Bootstrap과 agent 연동](docs/bootstrap.md)
-- [도구 selector 목록](standards/tools/README.md)
-- [기존 디렉터리 구조 마이그레이션](docs/migrations/dev-standards-directory-layout.md)
 - [GitHub Actions 소비 설정](https://github.com/ydj515/ci-workflows/blob/main/docs/sync-dev-standards.md)
 
 ## 개발
