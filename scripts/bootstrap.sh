@@ -210,6 +210,8 @@ tool_names = [tool.rsplit("/", 1)[-1] for tool in tools]
 
 if {"prettier", "biome"}.issubset(set(tool_names)):
     fail("Select only one TypeScript formatter: prettier or biome")
+if {"kover", "jacoco"}.issubset(set(tool_names)):
+    fail("Select only one JVM coverage tool: kover or jacoco")
 
 plan = []
 planned_targets = {}

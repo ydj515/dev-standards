@@ -19,6 +19,7 @@
 ## 설정 관리
 
 - Detekt 설정은 저장소에 커밋하고 build 설정에서 경로를 명시합니다.
+- Kotlin DSL 시작점은 `templates/gradle/detekt/build.gradle.kts.example`을 사용합니다.
 - `buildUponDefaultConfig`를 사용하면 파일에서 생략한 기본 규칙도 활성 상태일 수 있음을 문서화합니다.
 - major 버전을 변경할 때는 먼저 기본 설정을 다시 생성하고 제거·변경된 rule id를 점검합니다.
 - formatter와 중복되는 규칙은 어느 도구가 소유하는지 정하고 한쪽에서만 강제합니다.

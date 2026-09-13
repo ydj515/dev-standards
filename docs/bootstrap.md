@@ -72,6 +72,11 @@ Framework별 ESLint preset은 기존 `eslint.config.mjs`에 병합해야 하므�
 Bootstrap은 최초 채택을 위한 seed입니다. 복사 이후 파일, version 자리표시자와 프로젝트
 경로는 소비 저장소가 소유하고 검증합니다.
 
+Checkstyle, PMD, SpotBugs, Detekt, ktlint, ArchUnit, Kover와 JaCoCo의 build 연결 예시는
+`templates/gradle/<tool>/build.gradle.kts.example`에 있습니다. 이 파일들은 완성된 build를
+대체하지 않으므로 bootstrap이 자동 복사하지 않습니다. 선택한 예시의 plugin, dependency,
+task 설정만 기존 build에 병합합니다.
+
 ## Agent 진입 파일
 
 참조 관계는 다음과 같습니다.

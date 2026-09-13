@@ -36,6 +36,10 @@
 최소 구조는 `templates/maven/pom.xml.example`을 참고하되, 모든 `REPLACE_ME` 자리표시자는
 프로젝트가 검증한 값으로 교체합니다.
 
+예시는 Checkstyle, PMD, SpotBugs와 JaCoCo를 `verify` lifecycle에 연결하고 ArchUnit JUnit 5
+dependency를 포함합니다. Kotlin 중심 Gradle 전용 coverage인 Kover는 Maven build에 추가하지
+않습니다.
+
 ## Multi-module 구조
 
 - aggregator root는 `packaging`을 `pom`으로 두고 module 목록과 공통 관리를 소유합니다.

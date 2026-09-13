@@ -37,6 +37,10 @@ for profile in gradle maven go python typescript; do
     fail "mise template should enable lockfile: ${profile}"
 done
 
+for tool in archunit detekt jacoco kover ktlint; do
+  assert_file "${SOURCE_DIR}/templates/gradle/${tool}/build.gradle.kts.example"
+done
+
 react_dir="${TEST_ROOT}/react"
 mkdir -p "${react_dir}/.dev-standards"
 cat > "${react_dir}/.dev-standards/config.yml" <<'YAML'
@@ -95,7 +99,7 @@ version: 1
 languages: [kotlin, java]
 frameworks: [spring]
 builds: [gradle]
-tools: [detekt, checkstyle, pmd, spotbugs]
+tools: [detekt, ktlint, kover, archunit, checkstyle, pmd, spotbugs]
 runtimes: [mise]
 YAML
 
@@ -111,7 +115,28 @@ for relative_path in \
   mise.toml; do
   assert_file "${spring_dir}/${relative_path}"
 done
+grep -Fq 'archunit = { module = "com.tngtech.archunit:archunit-junit5"' \
+  "${spring_dir}/gradle/libs.versions.toml" || fail "Gradle catalog should include ArchUnit"
+grep -Fq 'kover = { id = "org.jetbrains.kotlinx.kover"' \
+  "${spring_dir}/gradle/libs.versions.toml" || fail "Gradle catalog should include Kover"
+grep -Fq 'ktlint = { id = "org.jlleitschuh.gradle.ktlint"' \
+  "${spring_dir}/gradle/libs.versions.toml" || fail "Gradle catalog should include ktlint"
+assert_absent "${spring_dir}/build.gradle.kts"
 assert_absent "${spring_dir}/src"
+
+coverage_conflict_dir="${TEST_ROOT}/coverage-conflict"
+mkdir -p "${coverage_conflict_dir}/.dev-standards"
+cat > "${coverage_conflict_dir}/.dev-standards/config.yml" <<'YAML'
+version: 1
+tools: [kover, jacoco]
+YAML
+
+if run_bootstrap \
+  --config "${coverage_conflict_dir}/.dev-standards/config.yml" \
+  --target "${coverage_conflict_dir}"; then
+  fail "Kover and JaCoCo should not be bootstrapped together"
+fi
+assert_absent "${coverage_conflict_dir}/AGENTS.md"
 
 maven_dir="${TEST_ROOT}/maven"
 mkdir -p "${maven_dir}/.dev-standards"
@@ -125,6 +150,10 @@ YAML
 run_bootstrap --config "${maven_dir}/.dev-standards/config.yml" --target "${maven_dir}"
 assert_file "${maven_dir}/pom.xml"
 assert_file "${maven_dir}/mise.toml"
+grep -Fq '<artifactId>archunit-junit5</artifactId>' \
+  "${maven_dir}/pom.xml" || fail "Maven template should include ArchUnit"
+grep -Fq '<artifactId>jacoco-maven-plugin</artifactId>' \
+  "${maven_dir}/pom.xml" || fail "Maven template should include JaCoCo"
 
 conflict_dir="${TEST_ROOT}/conflict"
 mkdir -p "${conflict_dir}/.dev-standards"

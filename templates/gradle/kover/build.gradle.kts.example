@@ -1,0 +1,28 @@
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
+plugins {
+    alias(libs.plugins.kover)
+}
+
+kover {
+    reports {
+        total {
+            html {
+                onCheck = true
+            }
+            xml {
+                onCheck = true
+            }
+            verify {
+                rule {
+                    minBound(80, CoverageUnit.LINE)
+                    minBound(70, CoverageUnit.BRANCH)
+                }
+            }
+        }
+    }
+}
+
+tasks.named("check") {
+    dependsOn("koverVerify")
+}

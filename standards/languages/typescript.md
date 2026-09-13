@@ -134,7 +134,7 @@ export async function loadOrder(orderId: OrderId): Promise<Order> {
   | Checkstyle / ktlint | ESLint + Prettier | 코딩 컨벤션 + 포맷팅 |
   | ArchUnit | dependency-cruiser / eslint-plugin-boundaries / Nx module boundaries | 아키텍처/레이어 의존성 검증 |
   | SpotBugs | ESLint + TypeScript compiler | 잠재 버그/타입 오류 |
-  | JaCoCo | Vitest/Jest + V8/Istanbul coverage | 테스트 커버리지 |
+  | JaCoCo / Kover | Vitest/Jest + V8/Istanbul coverage | 테스트 커버리지 |
 
 - 이 표는 책임 대응이며 분석 단계가 같은 것은 아닙니다. TypeScript compiler는 JVM bytecode
   분석을 대체하지 않고, `strict` typecheck와 type-aware ESLint를 조합해 유사한 오류 범위를

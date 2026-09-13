@@ -232,6 +232,9 @@ tool_names = {tool.rsplit("/", 1)[-1] for tool in tools}
 if {"prettier", "biome"}.issubset(tool_names):
     sys.stderr.write("Error: Select only one TypeScript formatter: prettier or biome\n")
     raise SystemExit(1)
+if {"kover", "jacoco"}.issubset(tool_names):
+    sys.stderr.write("Error: Select only one JVM coverage tool: kover or jacoco\n")
+    raise SystemExit(1)
 for tool in tools:
     tools_dir = standards_dir / "tools"
     if "/" in tool:

@@ -1,0 +1,17 @@
+plugins {
+    alias(libs.plugins.ktlint)
+}
+
+ktlint {
+    version.set(libs.versions.ktlint.get())
+    ignoreFailures.set(false)
+    outputToConsole.set(true)
+
+    filter {
+        exclude("**/generated/**")
+    }
+}
+
+tasks.named("check") {
+    dependsOn("ktlintCheck")
+}

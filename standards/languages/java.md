@@ -128,11 +128,16 @@ Order loadOrder(long orderId) {
 - 시간, 난수와 외부 I/O는 명시적 collaborator로 전달하여 재현 가능하게 만듭니다.
 - Checkstyle은 형식, PMD는 source pattern, SpotBugs는 bytecode defect를 담당하게 하고
   동일 문제를 여러 도구에 중복 설정하지 않습니다.
+- ArchUnit은 package와 layer 의존 방향을 실행 가능한 test로 고정합니다.
+- coverage는 JaCoCo를 기본으로 사용하고 Kotlin 중심 build에서 Kover를 채택했다면 같은
+  module에 두 coverage plugin을 중복 적용하지 않습니다.
 
 ```sh
 ./gradlew test check
 ./mvnw verify
 ```
+
+도구 시작점은 `tools/languages/java/`와 `templates/gradle/`에 있습니다.
 
 ## 9. 다른 언어 습관을 옮기지 않는다
 

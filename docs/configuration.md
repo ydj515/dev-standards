@@ -105,9 +105,22 @@ runtimes: [mise]
 ```
 
 - TypeScript formatter는 Prettier 또는 Biome 중 하나만 선택합니다.
+- JVM coverage는 Kotlin 중심 프로젝트의 Kover 또는 범용 JaCoCo 중 하나만 선택합니다.
 - Next.js는 `frameworks/next-ts/eslint-config-next`를 선택하고 일반 TypeScript 규칙과 같은
   `eslint.config.mjs`에서 병합합니다.
 - Python의 기본 품질 조합은 `tools: [ruff, pyright]`입니다.
+
+Kotlin과 Java를 함께 사용하는 Spring/Gradle 프로젝트의 시작점은 다음과 같습니다.
+
+```yaml
+languages: [kotlin, java]
+frameworks: [spring]
+builds: [gradle]
+tools: [detekt, ktlint, checkstyle, pmd, spotbugs, archunit, kover]
+```
+
+Java 중심이거나 기존 JaCoCo report pipeline을 유지해야 하면 `kover`만 `jacoco`로
+교체합니다. 두 selector를 함께 지정하면 compose와 bootstrap이 실패합니다.
 - 전체 selector 목록은 [도구 표준](../standards/tools/README.md)을 참고합니다.
 
 ## 생태계별 품질 책임
@@ -121,4 +134,4 @@ Java/Kotlin과 React/TypeScript 도구는 다음 책임으로 대응합니다. �
 | Checkstyle / ktlint | ESLint + Prettier | 코딩 컨벤션 + 포맷팅 |
 | ArchUnit | dependency-cruiser / eslint-plugin-boundaries / Nx module boundaries | 아키텍처/레이어 의존성 검증 |
 | SpotBugs | ESLint + TypeScript compiler | 잠재 버그/타입 오류 |
-| JaCoCo | Vitest/Jest + V8/Istanbul coverage | 테스트 커버리지 |
+| JaCoCo / Kover | Vitest/Jest + V8/Istanbul coverage | 테스트 커버리지 |

@@ -6,8 +6,8 @@
 tools/
 ├─ languages/
 │  ├─ go/golangci-lint.md
-│  ├─ java/{checkstyle,pmd,spotbugs}.md
-│  ├─ kotlin/detekt.md
+│  ├─ java/{archunit,checkstyle,jacoco,pmd,spotbugs}.md
+│  ├─ kotlin/{detekt,kover,ktlint}.md
 │  ├─ python/{ruff,pyright}.md
 │  └─ typescript/{eslint,prettier,biome,pnpm}.md
 └─ frameworks/
@@ -24,6 +24,8 @@ tools/
 - qualified path의 각 segment와 파일명은 kebab-case를 사용합니다.
 - framework 전용 도구는 `tools/frameworks/<framework>/`에 추가하고 해당 framework
   문서에서 책임과 적용 조건을 연결합니다.
+- JVM coverage는 `kover` 또는 `jacoco` 중 하나만 선택합니다. ArchUnit은 Java bytecode를
+  분석하므로 Java와 Kotlin 양쪽에서 `archunit` selector를 사용할 수 있습니다.
 - 여러 도구가 같은 설정 파일을 수정해야 하면 독립 bootstrap 템플릿을 중복 제공하지
   않습니다. 언어 도구의 설정을 기준으로 framework preset을 수동 병합하고 최종 파일은
   소비 저장소가 소유합니다.

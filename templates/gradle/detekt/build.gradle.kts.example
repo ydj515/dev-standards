@@ -1,0 +1,22 @@
+import dev.detekt.gradle.Detekt
+
+plugins {
+    alias(libs.plugins.detekt)
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    parallel = true
+}
+
+tasks.withType<Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+        sarif.required.set(true)
+    }
+}
+
+tasks.named("check") {
+    dependsOn("detektMain", "detektTest")
+}

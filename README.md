@@ -74,7 +74,7 @@ runtimes: [mise]
 | 언어 | Go, Java, Kotlin, Python, TypeScript |
 | 아키텍처 | Domain-oriented, Layered Clean, Feature Layered, Feature-Sliced, Route Feature |
 | 프레임워크 | Spring, FastAPI, React, Next.js, MUI, Tailwind, Bootstrap, Thymeleaf |
-| 품질 도구 | golangci-lint, Detekt, Checkstyle, PMD, SpotBugs, Ruff, Pyright, ESLint, Prettier, Vitest |
+| 품질 도구 | golangci-lint, Detekt, ktlint, Checkstyle, PMD, SpotBugs, ArchUnit, Kover, JaCoCo, Ruff, Pyright, ESLint, Prettier, Vitest |
 | 빌드·런타임 | Gradle, Maven, pnpm, mise |
 
 ## 문서

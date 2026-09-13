@@ -236,6 +236,8 @@ final class PlaceOrderService {
   database로 integration test합니다.
 - package 의존 방향과 transaction annotation 소유 계층은 architecture test로 고정합니다.
   예외가 필요하면 허용 목록에 기술적 이유와 제거 조건을 함께 기록합니다.
+- JVM package 경계는 ArchUnit으로 검증하고, coverage는 Kotlin 중심 build의 Kover 또는
+  범용 JaCoCo 중 하나를 `check`에 연결합니다.
 - Actuator endpoint는 노출 범위와 인증을 명시하고 readiness와 liveness 의미를 구분합니다.
 
 ```sh

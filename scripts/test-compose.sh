@@ -53,6 +53,12 @@ frameworks: [spring, react-ts]
 builds: [gradle]
 tools:
   - detekt
+  - ktlint
+  - kover
+  - archunit
+  - checkstyle
+  - pmd
+  - spotbugs
   - eslint
   - prettier
   - pnpm
@@ -79,6 +85,12 @@ for relative_path in \
   frameworks/react-ts.md \
   build-tools/gradle.md \
   tools/languages/kotlin/detekt.md \
+  tools/languages/kotlin/ktlint.md \
+  tools/languages/kotlin/kover.md \
+  tools/languages/java/archunit.md \
+  tools/languages/java/checkstyle.md \
+  tools/languages/java/pmd.md \
+  tools/languages/java/spotbugs.md \
   tools/languages/typescript/eslint.md \
   tools/languages/typescript/prettier.md \
   tools/languages/typescript/pnpm.md \
@@ -206,6 +218,42 @@ for relative_path in \
   tools/frameworks/next-ts/eslint-config-next.md; do
   assert_file "${framework_tool_dir}/.dev-standards/standards/${relative_path}"
 done
+
+# JaCoCo remains independently selectable for Java-centric JVM builds.
+jacoco_dir="${TEST_ROOT}/jacoco"
+mkdir -p "${jacoco_dir}/.dev-standards"
+cat > "${jacoco_dir}/.dev-standards/config.yml" <<'YAML'
+version: 1
+base: false
+languages: [java]
+builds: [gradle]
+tools: [jacoco]
+YAML
+
+bash "${SCRIPT_DIR}/compose.sh" \
+  --source "${SOURCE_DIR}" \
+  --config "${jacoco_dir}/.dev-standards/config.yml" \
+  --output "${jacoco_dir}/.dev-standards/styleguide.md" \
+  --modules-dir "${jacoco_dir}/.dev-standards/standards"
+
+assert_file "${jacoco_dir}/.dev-standards/standards/tools/languages/java/jacoco.md"
+
+# A single JVM module must not run two competing coverage plugins.
+coverage_conflict_dir="${TEST_ROOT}/coverage-conflict"
+mkdir -p "${coverage_conflict_dir}/.dev-standards"
+cat > "${coverage_conflict_dir}/.dev-standards/config.yml" <<'YAML'
+version: 1
+tools: [kover, jacoco]
+YAML
+
+if bash "${SCRIPT_DIR}/compose.sh" \
+  --source "${SOURCE_DIR}" \
+  --config "${coverage_conflict_dir}/.dev-standards/config.yml" \
+  --output "${coverage_conflict_dir}/.dev-standards/styleguide.md" \
+  --modules-dir "${coverage_conflict_dir}/.dev-standards/standards"; then
+  fail "Kover and JaCoCo should not be composable together"
+fi
+assert_absent "${coverage_conflict_dir}/.dev-standards/styleguide.md"
 
 # A changed selection replaces only the generated standards tree and removes stale modules.
 cat > "${consumer_dir}/.dev-standards/config.yml" <<'YAML'

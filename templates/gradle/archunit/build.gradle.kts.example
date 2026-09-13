@@ -1,0 +1,20 @@
+import org.gradle.api.tasks.testing.Test
+
+dependencies {
+    testImplementation(libs.archunit)
+}
+
+val architectureTest by tasks.registering(Test::class) {
+    group = "verification"
+    description = "Checks compiled application dependency directions with ArchUnit."
+    testClassesDirs = sourceSets["test"].output.classesDirs
+    classpath = sourceSets["test"].runtimeClasspath
+    filter {
+        includeTestsMatching("*ArchitectureTest*")
+    }
+    useJUnitPlatform()
+}
+
+tasks.named("check") {
+    dependsOn(architectureTest)
+}
