@@ -107,6 +107,9 @@ CreateOrderRequest
 - persistence model과 domain model의 차이가 작으면 adapter에서 같은 객체를 사용할 수
   있지만 ORM 제약이 domain API를 왜곡하면 분리합니다.
 - package 의존 방향과 금지 import를 architecture test 또는 정적 분석으로 검증합니다.
+- 위 허용 방향과 샘플 요청 흐름은 실제 build module 그래프와 구분합니다. 프로젝트의
+  모듈 diagram에는 범위와 화살표 의미를 명시하고 build tool의 실제 의존 그래프와
+  일치하는지 검사합니다. 문서 일치 검사와 금지 방향·순환 의존 검사는 별도로 유지합니다.
 - 작은 CRUD는 파일을 합칠 수 있지만 presentation/application/domain/infrastructure의
   논리적 책임은 유지합니다.
 

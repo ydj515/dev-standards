@@ -6,6 +6,12 @@ Java 코드는 명시적인 타입과 객체의 불변식, 예측 가능한 수�
 
 ## 1. Java다운 기본 원칙
 
+- build 실행 JDK, compiler toolchain, `--release`와 배포 JDK를 구분하고 지원 대상에 맞는
+  공식 Java 문법·API를 사용합니다. 아래 pattern `switch` 예시는 Java 21 이상의 안정
+  기능을 전제로 합니다. 이전 버전에서는 지원되는 분기 방식으로 작성합니다.
+- preview 기능은 명시적으로 채택한 경우에만 compile/test/runtime flag를 함께 관리합니다.
+  새 bytecode나 문법을 도입할 때 formatter, 정적 분석과 coverage 도구의 지원도 확인합니다.
+
 - package와 타입 경계를 도메인 책임에 맞추고 `Utils`, `Manager`, `Helper`에 서로 다른
   책임을 모으지 않습니다.
 - 생성자가 객체의 필수 불변식을 완성하게 하고, 선택적 변경이 필요하지 않으면
@@ -149,3 +155,5 @@ Order loadOrder(long orderId) {
 참고: [Records](https://dev.java/learn/using-record-to-model-immutable-data/),
 [Pattern Matching](https://dev.java/learn/pattern-matching/),
 [Optional](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html)
+
+버전별 문법 참고: [JEP 441: Pattern Matching for switch](https://openjdk.org/jeps/441)

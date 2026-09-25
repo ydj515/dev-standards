@@ -6,6 +6,13 @@ Go 코드는 다른 언어의 클래스 구조를 옮긴 코드가 아니라 작
 
 ## 1. Go다운 기본 원칙
 
+- `go.mod`의 `go`와 `toolchain` 지시문, `go.work` 및 실제 선택된 toolchain을 확인합니다.
+  더 최신 toolchain이 설치돼 있어도 module의 최소 지원 버전을 넘는 문법·표준 API를
+  임의로 사용하지 않습니다. 아래 `any` 예시는 Go 1.18 이상을 전제로 합니다.
+- 해당 Go 버전의 release note를 기준으로 언어 의미와 표준 library 변경을 확인합니다.
+  loop variable이나 timer 동작처럼 버전에 영향을 받는 코드는 관련 테스트를 실행하고,
+  `gofmt`, `go vet`와 linter가 사용하는 toolchain의 호환성도 확인합니다.
+
 - 복잡한 계층보다 조합과 작은 함수를 사용합니다. embedding은 상속이 아닙니다.
 - 성공 경로는 왼쪽에 유지하고 오류와 예외 조건은 guard clause로 일찍 반환합니다.
 - 가능한 타입은 유용한 zero value를 갖게 설계합니다. 불변식 검증이 필요한 경우에만
@@ -210,3 +217,6 @@ go test -race ./...
 참고: [Effective Go](https://go.dev/doc/effective_go),
 [Go Code Review Comments](https://go.dev/wiki/CodeReviewComments),
 [Go Doc Comments](https://go.dev/doc/comment)
+
+버전별 설정 참고: [Go Toolchains](https://go.dev/doc/toolchain),
+[Go 1.18 Release Notes](https://go.dev/doc/go1.18)

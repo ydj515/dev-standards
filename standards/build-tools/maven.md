@@ -17,6 +17,16 @@
 
 ## POM 버전 관리
 
+- Wrapper의 Maven 버전, 실행 JDK, compiler toolchain과 각 plugin 버전을 먼저 확인합니다.
+  해당 버전의 공식 POM reference와 plugin goal/parameter 문서를 기준으로 설정하고,
+  다른 Maven major 버전의 model이나 plugin 예시를 그대로 가져오지 않습니다.
+- Maven core와 plugin의 권장 구성을 구분합니다. compiler plugin의 `release` 설정 등도
+  실제 plugin/JDK 지원 범위에 맞춰 사용하고 배포 runtime과의 API 호환성을 검증합니다.
+- parent와 활성 profile이 반영된 effective POM 및 `./mvnw --version`으로 실제 설정을
+  확인합니다. 문법이나 lifecycle 연결을 바꾸면 CI와 같은 profile의 `verify`를 실행합니다.
+- plugin 버전 변경 시 goal, parameter 기본값, JDK 요구사항과 migration guide를 점검합니다.
+  경고를 숨기거나 예시를 맞추기 위해 Maven·plugin 버전을 임의로 올리지 않습니다.
+
 - Java release, 문자 인코딩, dependency와 build plugin 버전은 `<properties>`에서
   의미 있는 이름으로 중앙화합니다.
 - 여러 module에서 공유하는 dependency 버전은 parent POM의 `<dependencyManagement>`
@@ -57,6 +67,8 @@ dependency를 포함합니다. Kotlin 중심 Gradle 전용 coverage인 Kover는 
   연결합니다.
 - CI에서 `-DskipTests` 또는 `-Dmaven.test.skip=true`로 필수 검증을 우회하지 않습니다.
 - dependency 충돌은 실제 resolution 결과와 effective POM을 함께 확인합니다.
+- 모듈 의존 문서는 활성 profile의 reactor와 실제 의존 그래프에 대조하고 `verify`에
+  연결합니다. 범위·화살표·실패 fixture 기준은 `tools/languages/java/archunit.md`를 따릅니다.
 
 ```sh
 ./mvnw test
@@ -71,3 +83,5 @@ dependency를 포함합니다. Kotlin 중심 Gradle 전용 coverage인 Kover는 
 
 참고: [Maven Wrapper checksum verification](https://maven.apache.org/tools/wrapper/),
 [Maven Reproducible Builds](https://maven.apache.org/guides/mini/guide-reproducible-builds.html)
+
+버전별 설정 참고: [Maven Compiler Plugin](https://maven.apache.org/plugins/maven-compiler-plugin/)

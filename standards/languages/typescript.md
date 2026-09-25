@@ -6,6 +6,12 @@ TypeScript 코드는 JavaScript runtime의 동작을 유지하면서 타입 좁�
 
 ## 1. TypeScript다운 기본 원칙
 
+- lockfile의 TypeScript 버전과 `target`, `lib`, `module`, `moduleResolution`, 실제 Node/
+  browser 지원 범위를 함께 확인합니다. 해당 버전의 공식 권장 옵션과 module 규칙을 따르고
+  bundler, framework와 type-aware ESLint의 지원 범위도 맞춥니다.
+- `satisfies`는 TypeScript 4.9 이상에서 지원됩니다. `target`의 문법 변환과 `lib`의 타입
+  선언은 runtime API polyfill을 제공하지 않으므로 실제 배포 환경에서도 동작을 검증합니다.
+
 - `strict`를 기본으로 하고 저장소의 지원 runtime, module 방식과 build output을
   `tsconfig.json`에 명시합니다.
 - local 구현은 inference를 활용하고 exported function, package boundary와 복잡한 반환은
@@ -170,3 +176,7 @@ pnpm run build
 [Object Types](https://www.typescriptlang.org/docs/handbook/2/objects.html),
 [TSConfig strict](https://www.typescriptlang.org/tsconfig/strict.html),
 [Null and undefined](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#null-and-undefined)
+
+버전별 설정 참고: [TypeScript 4.9](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html),
+[TSConfig target](https://www.typescriptlang.org/tsconfig/target.html),
+[TSConfig lib](https://www.typescriptlang.org/tsconfig/lib.html)

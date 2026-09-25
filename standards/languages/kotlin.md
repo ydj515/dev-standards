@@ -6,6 +6,13 @@ Kotlin 코드는 Java 보일러플레이트를 짧게 줄인 코드가 아니라
 
 ## 1. Kotlin다운 기본 원칙
 
+- Kotlin plugin/compiler와 stdlib 버전, `languageVersion`, `apiVersion`, JVM target 및 Java
+  toolchain을 확인하고 해당 버전의 공식 권장 문법과 compiler 설정을 사용합니다.
+  Gradle Kotlin DSL 버전과 애플리케이션 Kotlin 버전을 혼동하지 않습니다.
+- compiler 옵션 DSL 전환은 사용 중인 Kotlin plugin의 migration guide를 기준으로 합니다.
+  opt-in 기능과 compiler plugin, Detekt 등의 호환성을 확인하고 compiler 업그레이드 없이
+  사용할 수 없는 문법을 예시에서 그대로 가져오지 않습니다.
+
 - 변경이 필요하지 않은 local/property와 collection은 `val`과 read-only interface로
   선언합니다.
 - `if`, `when`, `try`를 expression으로 사용하되 복잡한 chain보다 읽기 쉬운 named
@@ -168,3 +175,5 @@ Detekt rule 시작점은 `templates/detekt/`, Gradle 연결 예시는 `templates
 [Kotlin Idioms](https://kotlinlang.org/docs/idioms.html),
 [Null Safety](https://kotlinlang.org/docs/null-safety.html),
 [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+
+버전별 설정 참고: [Kotlin Gradle Compiler Options](https://kotlinlang.org/docs/gradle-compiler-options.html)

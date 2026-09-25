@@ -6,6 +6,12 @@ Python 코드는 class와 pattern을 많이 사용하는 코드가 아니라 읽
 
 ## 1. Python다운 기본 원칙
 
+- `requires-python`, runtime 고정 설정과 CI의 최소 지원 Python 버전을 확인합니다.
+  해당 버전의 공식 문법·typing API를 기준으로 작성하고 Ruff/Pyright의 target도 맞춥니다.
+- 아래 `dataclass(slots=True)` 예시는 Python 3.10 이상을 전제로 합니다. 새 type hint와
+  annotation 처리 방식은 지원 버전에서의 import/runtime 동작까지 확인합니다. type checker가
+  통과했다는 이유만으로 실행 호환성을 보장하지 않습니다.
+
 - 단순한 동작은 module-level function으로 시작하고 공유 상태와 불변식이 실제로 있을 때
   class를 도입합니다.
 - public API와 I/O 경계는 type hint를 명시하되 local variable의 자명한 타입까지
@@ -155,3 +161,5 @@ pyright
 [typing.Protocol](https://docs.python.org/3/library/typing.html#typing.Protocol),
 [contextlib](https://docs.python.org/3/library/contextlib.html),
 [assert statement](https://docs.python.org/3/reference/simple_stmts.html#the-assert-statement)
+
+버전별 문법 참고: [Python 3.10 변경 사항](https://docs.python.org/3.10/whatsnew/3.10.html)

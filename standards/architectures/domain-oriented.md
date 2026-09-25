@@ -107,6 +107,9 @@ CreateOrderRequest
   outbox가 필요하면 함께 설계합니다.
 - domain/application은 framework 없이 단위 테스트하고 adapter contract와 context 간
   금지 import는 integration/architecture test로 검증합니다.
+- bounded context와 build module이 일대일이라고 가정하지 않습니다. 모듈 diagram에는
+  context와 module 매핑 및 검사 범위를 명시하고 실제 build 의존 그래프와 대조합니다.
+  event의 전달 방향을 compile dependency 화살표로 해석하지 않습니다.
 - 작은 기능은 파일과 package를 합칠 수 있지만 책임 소유권과 의존 방향은 유지합니다.
 
 ## 6. 피해야 할 구조

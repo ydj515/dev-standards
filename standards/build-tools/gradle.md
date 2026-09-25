@@ -15,6 +15,22 @@
 - Gradle build script와 Wrapper는 실행 코드이므로 신뢰하지 않는 변경을 검토 없이
   실행하지 않습니다.
 
+## 버전별 DSL과 API 선택
+
+- Wrapper의 Gradle 버전을 기준으로 같은 버전의 User Manual, DSL/API reference와 upgrade
+  guide를 확인합니다. Gradle 실행 JDK, Java toolchain, Kotlin Gradle plugin과 품질 plugin의
+  호환 범위를 함께 확인합니다.
+- Kotlin DSL이 사용하는 Gradle 내장 Kotlin과 애플리케이션의 Kotlin compiler 버전을
+  구분합니다. `build.gradle.kts`와 Groovy DSL 예시를 문법만 치환해 적용하지 않습니다.
+- 해당 버전에서 지원되는 lazy task registration과 Provider 기반 설정을 우선하고,
+  dependency resolution을 구성 단계에서 불필요하게 실행하지 않습니다. custom task는
+  프로젝트의 configuration cache 정책에 맞춰 input/output과 실행 시 접근 대상을 설계합니다.
+- 최신 문서의 incubating API는 Wrapper에서의 지원 여부와 안정성을 별도로 확인합니다.
+  deprecation warning을 숨기지 말고 소유 코드와 외부 plugin의 경고를 구분해 전환 계획을 남깁니다.
+- `./gradlew --version`으로 실제 실행 환경을 확인하고, DSL이나 task 구현을 변경하면 대상
+  task를 실행합니다. configuration cache를 사용하는 프로젝트는 재실행 시 cache 재사용과
+  입력 변경 후 검증 재수행까지 확인합니다.
+
 ## Version Catalog
 
 - 기본 catalog는 root build의 `gradle/libs.versions.toml`에 둡니다.
@@ -68,6 +84,10 @@ mirror나 allowlist를 사용하면 예제의 `mavenCentral()`을 해당 프로�
   build를 사용합니다.
 - 광범위한 `allprojects`와 `subprojects` 설정으로 숨은 결합을 만들지 않습니다.
 - 직접 만든 verification task는 표준 `check` lifecycle에 연결합니다.
+- JVM 모듈 의존 diagram은 Gradle이 평가한 그래프와 비교하고 `architectureTest` 및 root
+  `check`에서 실행되게 합니다. root `check`가 subproject의 `check`를 자동 집계한다고
+  가정하지 말고 실제 task 연결을 확인합니다. 비교 범위와 실패 fixture 기준은
+  `tools/languages/java/archunit.md`의 문서·그래프 일치 검증 절을 따릅니다.
 
 ## 검증
 
@@ -94,3 +114,5 @@ mirror나 allowlist를 사용하면 예제의 `mavenCentral()`을 해당 프로�
 
 참고: [Gradle Dependency Locking](https://docs.gradle.org/current/userguide/dependency_locking.html),
 [Gradle Dependency Verification](https://docs.gradle.org/current/userguide/dependency_verification.html)
+
+버전별 설정 참고: [Gradle Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html)
