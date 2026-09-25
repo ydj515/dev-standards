@@ -23,6 +23,8 @@
 1. 소비 저장소가 `.dev-standards/config.yml`에서 적용할 모듈을 선택합니다.
 2. Release의 `compose.sh`가 선택된 표준을 조합합니다.
 3. 소비 저장소에는 `.dev-standards/styleguide.md`와 `.dev-standards/standards/**`가 생성됩니다.
+   Codex, Claude Code, Gemini CLI용 규칙 병합 skill도 `.dev-standards/{codex,claude,gemini}/skills/`에 생성됩니다.
+   `merge-dev-standards`는 `AGENTS.md`에 작업별 원본 문서 안내를 병합해 필요한 규칙만 읽도록 합니다.
 4. 선택적으로 `bootstrap.sh`가 lint, format, build와 agent 설정의 시작점을 복사합니다.
 
 `dev-standards`는 표준과 템플릿의 원본을 소유합니다. 소비 저장소의 설정과 bootstrap 이후의
@@ -82,6 +84,7 @@ runtimes: [mise]
 - [문서 전체 보기](docs/README.md)
 - [선택 설정과 architecture profile](docs/configuration.md)
 - [설정 Bootstrap과 agent 연동](docs/bootstrap.md)
+- [Agent별 공유 규칙 적용 Skill](docs/agent-skills.md)
 - [GitHub Actions 소비 설정](https://github.com/ydj515/ci-workflows/blob/main/docs/sync-dev-standards.md)
 
 ## 개발

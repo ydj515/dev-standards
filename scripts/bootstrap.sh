@@ -23,7 +23,7 @@ Options:
   --target <dir>          Consuming repository root (default: current directory)
   --mise-profile <name>   Resolve an ambiguous mise template: gradle, maven, go, python, typescript
   --manifest <file>       Write copied/selected repository-relative paths for callers such as CI
-  --agents-only           Copy only missing AGENTS.md, CLAUDE.md, and GEMINI.md entry files
+  --agents-only           Copy missing agent entry files and root .worktreeinclude
   --dry-run               Validate and print the copy plan without changing the target repository
   -h, --help              Show this help
 EOF
@@ -232,6 +232,7 @@ def add_template(source_relative, target_relative, selected_by, existing_policy=
 add_template("agents/AGENTS.md", "AGENTS.md", "agent-entry", existing_policy="preserve")
 add_template("agents/CLAUDE.md", "CLAUDE.md", "agent-entry", existing_policy="preserve")
 add_template("agents/GEMINI.md", "GEMINI.md", "agent-entry", existing_policy="preserve")
+add_template("agent-skills/assets/worktreeinclude", ".worktreeinclude", "agent-worktree", existing_policy="preserve")
 
 
 if languages:
@@ -341,9 +342,14 @@ for state, source, target, target_relative, selected_by in states:
             temporary_path.unlink(missing_ok=True)
     display_state = "WOULD CREATE" if dry_run and state == "CREATE" else state
     if state == "SKIPPED":
+        hint = (
+            "review project-specific worktree copy patterns"
+            if target_relative == ".worktreeinclude"
+            else "verify that it references the shared standards"
+        )
         sys.stderr.write(
             f"[WARN] Existing {target_relative} preserved; "
-            "verify that it references the shared standards\n"
+            f"{hint}\n"
         )
     else:
         print(f"{display_state} {target_relative} ({selected_by})")

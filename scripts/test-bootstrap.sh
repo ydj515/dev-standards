@@ -66,6 +66,7 @@ for relative_path in \
   AGENTS.md \
   CLAUDE.md \
   GEMINI.md \
+  .worktreeinclude \
   .editorconfig \
   eslint.config.mjs \
   .dependency-cruiser.cjs \
@@ -83,6 +84,11 @@ cmp -s "${react_dir}/CLAUDE.md" "${SOURCE_DIR}/templates/agents/CLAUDE.md" || \
   fail "CLAUDE.md should match the central template"
 cmp -s "${react_dir}/GEMINI.md" "${SOURCE_DIR}/templates/agents/GEMINI.md" || \
   fail "GEMINI.md should match the central template"
+cmp -s "${react_dir}/.worktreeinclude" "${SOURCE_DIR}/templates/agent-skills/assets/worktreeinclude" || \
+  fail ".worktreeinclude should match the central template"
+if grep -Ev '^[[:space:]]*(#|$)' "${react_dir}/.worktreeinclude"; then
+  fail ".worktreeinclude must not copy any local files by default"
+fi
 [[ "$(cat "${react_dir}/CLAUDE.md")" == "@AGENTS.md" ]] || \
   fail "CLAUDE.md should reference only AGENTS.md"
 [[ "$(cat "${react_dir}/GEMINI.md")" == "@./AGENTS.md" ]] || \
@@ -188,7 +194,7 @@ run_bootstrap \
   --manifest "${agents_only_dir}/manifest.txt" \
   --agents-only
 
-for relative_path in AGENTS.md CLAUDE.md GEMINI.md; do
+for relative_path in AGENTS.md CLAUDE.md GEMINI.md .worktreeinclude; do
   assert_file "${agents_only_dir}/${relative_path}"
   grep -Fxq "${relative_path}" "${agents_only_dir}/manifest.txt" || \
     fail "agents-only manifest missing ${relative_path}"
@@ -197,8 +203,8 @@ done
   fail "agents-only bootstrap should preserve .editorconfig"
 [[ "$(cat "${agents_only_dir}/mise.toml")" == "project-owned runtime settings" ]] || \
   fail "agents-only bootstrap should preserve mise.toml"
-[[ "$(wc -l < "${agents_only_dir}/manifest.txt" | tr -d ' ')" == "3" ]] || \
-  fail "agents-only manifest should contain only agent entry files"
+[[ "$(wc -l < "${agents_only_dir}/manifest.txt" | tr -d ' ')" == "4" ]] || \
+  fail "agents-only manifest should contain entry files and .worktreeinclude"
 
 ambiguous_dir="${TEST_ROOT}/ambiguous"
 mkdir -p "${ambiguous_dir}/.dev-standards"
@@ -243,6 +249,7 @@ assert_absent "${dry_run_dir}/mise.toml"
 assert_absent "${dry_run_dir}/AGENTS.md"
 assert_absent "${dry_run_dir}/CLAUDE.md"
 assert_absent "${dry_run_dir}/GEMINI.md"
+assert_absent "${dry_run_dir}/.worktreeinclude"
 
 existing_agent_dir="${TEST_ROOT}/existing-agent"
 mkdir -p "${existing_agent_dir}/.dev-standards"
@@ -252,6 +259,8 @@ base: false
 YAML
 printf '%s\n' '# Project-owned agent instructions' > "${existing_agent_dir}/AGENTS.md"
 printf '%s\n' '# Project-owned Gemini instructions' > "${existing_agent_dir}/GEMINI.md"
+printf '%s\n' '# Local setup' '.env.local' > "${existing_agent_dir}/.worktreeinclude"
+cp "${existing_agent_dir}/.worktreeinclude" "${TEST_ROOT}/expected-worktreeinclude"
 
 run_bootstrap \
   --config "${existing_agent_dir}/.dev-standards/config.yml" \
@@ -262,6 +271,11 @@ grep -Fqx '# Project-owned agent instructions' "${existing_agent_dir}/AGENTS.md"
 grep -Fqx '# Project-owned Gemini instructions' "${existing_agent_dir}/GEMINI.md" || \
   fail "existing GEMINI.md should be preserved"
 assert_file "${existing_agent_dir}/CLAUDE.md"
+cmp -s "${existing_agent_dir}/.worktreeinclude" "${TEST_ROOT}/expected-worktreeinclude" || \
+  fail "existing .worktreeinclude must be preserved byte-for-byte"
+if grep -Fxq '.worktreeinclude' "${existing_agent_dir}/manifest.txt"; then
+  fail "preserved .worktreeinclude must not enter the bootstrap manifest"
+fi
 if grep -Fxq 'AGENTS.md' "${existing_agent_dir}/manifest.txt"; then
   fail "preserved AGENTS.md should not be added to the bootstrap manifest"
 fi
@@ -287,7 +301,8 @@ run_bootstrap --config "${empty_dir}/.dev-standards/config.yml" --target "${empt
 assert_file "${empty_dir}/AGENTS.md"
 assert_file "${empty_dir}/CLAUDE.md"
 assert_file "${empty_dir}/GEMINI.md"
-[[ "$(find "${empty_dir}" -type f | wc -l | tr -d ' ')" == "4" ]] || \
-  fail "empty standard selection should create only agent entry files"
+assert_file "${empty_dir}/.worktreeinclude"
+[[ "$(find "${empty_dir}" -type f | wc -l | tr -d ' ')" == "5" ]] || \
+  fail "empty standard selection should create entry files and .worktreeinclude"
 
 echo "All bootstrap tests passed"

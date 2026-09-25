@@ -15,6 +15,7 @@ Options:
   --source <dir>       Source directory containing 'standards/' (default: script parent directory)
   --config <file>      Configuration YAML file (e.g., .dev-standards/config.yml)
   --output <file>      Merged markdown file path (e.g., .dev-standards/styleguide.md)
+                       Agent skill bundles are written next to this file
   --modules-dir <dir>  Optional directory for selected standards in their original hierarchy
   --source-ref <ref>   Optional source reference tag/commit for header
   -h, --help           Show this help
@@ -164,11 +165,15 @@ for raw_line in lines:
 
 files_to_include = []
 
-# 1. Base
+# 1. Base and shared contribution workflows
 if data.get("base", True) is True:
-    base_file = standards_dir / "base.md"
-    if base_file.is_file():
-        files_to_include.append(str(base_file))
+    for relative in (
+        "base.md", "workflows/commit.md", "workflows/pr.md",
+        "workflows/branch.md", "workflows/worktree.md",
+    ):
+        base_file = standards_dir / relative
+        if base_file.is_file():
+            files_to_include.append(str(base_file))
 
 # 2. Languages
 langs = selection_values("languages", data.get("languages") or data.get("language", []))
@@ -358,3 +363,57 @@ PY
   rm -f -- "${PARSED_FILES_MANIFEST}"
   echo "Successfully synchronized selected standards to ${MODULES_DIR}"
 fi
+
+# Distribute self-contained skills next to the guide. Native agent directories
+# remain project-owned and are modified only when the user invokes a skill.
+python3 - "${SOURCE_DIR}/templates/agent-skills" "$(dirname "${OUTPUT_FILE}")" <<'PY'
+import os
+import sys
+import tempfile
+from pathlib import Path
+
+templates = Path(sys.argv[1])
+destination = Path(sys.argv[2]).absolute()
+
+if not templates.is_dir():
+    print("[WARN] No agent skill templates in source; skipping skill distribution", file=sys.stderr)
+    raise SystemExit(0)
+
+plan = []
+for agent in ("codex", "claude", "gemini"):
+    skill = destination / agent / "skills" / "merge-dev-standards"
+    for relative in (
+        "SKILL.md",
+        "references/merge-rules.md",
+        "references/codex.md",
+        "references/claude.md",
+        "references/gemini.md",
+        "assets/worktreeinclude",
+        "assets/AGENTS.md",
+    ):
+        source = templates.parent / "agents/AGENTS.md" if relative == "assets/AGENTS.md" else templates / relative
+        target = skill / relative
+        if not source.is_file():
+            raise SystemExit(f"Error: agent skill template not found: {source}")
+        for path in (target, *target.parents):
+            if path.is_symlink():
+                raise SystemExit(f"Error: refusing symbolic link in agent skill destination: {path}")
+            if path.exists() and (not path.is_file() if path == target else not path.is_dir()):
+                raise SystemExit(f"Error: incompatible agent skill destination: {path}")
+            if path == destination:
+                break
+        plan.append((target, source.read_bytes()))
+
+for target, content in plan:
+    if target.is_file() and target.read_bytes() == content:
+        continue
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=target.parent, delete=False) as temporary:
+        temporary.write(content)
+        temporary_path = Path(temporary.name)
+    try:
+        os.replace(temporary_path, target)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+print(f"Successfully distributed agent skills to {destination}")
+PY

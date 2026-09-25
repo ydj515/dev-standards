@@ -77,6 +77,10 @@ bash "${SCRIPT_DIR}/compose.sh" \
 assert_file "${consumer_dir}/.dev-standards/styleguide.md"
 for relative_path in \
   base.md \
+  workflows/commit.md \
+  workflows/pr.md \
+  workflows/branch.md \
+  workflows/worktree.md \
   languages/kotlin.md \
   languages/typescript.md \
   architectures/layered-clean.md \
@@ -224,7 +228,6 @@ jacoco_dir="${TEST_ROOT}/jacoco"
 mkdir -p "${jacoco_dir}/.dev-standards"
 cat > "${jacoco_dir}/.dev-standards/config.yml" <<'YAML'
 version: 1
-base: false
 languages: [java]
 builds: [gradle]
 tools: [jacoco]
@@ -237,6 +240,22 @@ bash "${SCRIPT_DIR}/compose.sh" \
   --modules-dir "${jacoco_dir}/.dev-standards/standards"
 
 assert_file "${jacoco_dir}/.dev-standards/standards/tools/languages/java/jacoco.md"
+
+# Omitting base includes contribution guides in both original and merged outputs.
+for guide in commit pr branch worktree; do
+  cmp -s "${SOURCE_DIR}/standards/workflows/${guide}.md" \
+    "${jacoco_dir}/.dev-standards/standards/workflows/${guide}.md" || \
+    fail "default base should distribute the ${guide} guide"
+done
+python3 - "${SOURCE_DIR}" "${jacoco_dir}/.dev-standards/styleguide.md" <<'PY'
+import sys
+from pathlib import Path
+
+source, output = map(Path, sys.argv[1:])
+merged = output.read_text()
+for guide in ("commit", "pr", "branch", "worktree"):
+    assert (source / "standards/workflows" / f"{guide}.md").read_text() in merged
+PY
 
 # A single JVM module must not run two competing coverage plugins.
 coverage_conflict_dir="${TEST_ROOT}/coverage-conflict"
@@ -273,9 +292,12 @@ assert_file "${consumer_dir}/.dev-standards/standards/languages/python.md"
 assert_file "${consumer_dir}/.dev-standards/standards/tools/languages/python/ruff.md"
 assert_file "${consumer_dir}/.dev-standards/standards/tools/languages/python/pyright.md"
 assert_absent "${consumer_dir}/.dev-standards/standards/base.md"
+assert_absent "${consumer_dir}/.dev-standards/standards/workflows"
 assert_absent "${consumer_dir}/.dev-standards/standards/languages/kotlin.md"
 assert_absent "${consumer_dir}/.dev-standards/standards/architectures"
 assert_file "${consumer_dir}/.dev-standards/config.yml"
 assert_absent "${consumer_dir}/src"
+
+python3 "${SCRIPT_DIR}/test-agent-skills.py"
 
 echo "All compose tests passed"

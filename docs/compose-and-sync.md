@@ -31,9 +31,26 @@
 ```text
 .dev-standards/
 ├─ config.yml                  # 소비 저장소 소유
-├─ styleguide.md               # 선택 문서를 합친 agent 진입점
+├─ styleguide.md               # 전체 병합본 (기존 통합용)
+├─ codex/skills/merge-dev-standards/
+│  ├─ SKILL.md
+│  ├─ assets/                    # AGENTS.md, worktreeinclude
+│  └─ references/              # merge-rules.md, codex.md, claude.md, gemini.md
+├─ claude/skills/merge-dev-standards/
+│  ├─ SKILL.md
+│  ├─ assets/                    # AGENTS.md, worktreeinclude
+│  └─ references/              # 동일한 네 참고 문서
+├─ gemini/skills/merge-dev-standards/
+│  ├─ SKILL.md
+│  ├─ assets/                    # AGENTS.md, worktreeinclude
+│  └─ references/              # 동일한 네 참고 문서
 └─ standards/                 # 같은 선택 문서의 개별 원본
    ├─ base.md
+   ├─ workflows/
+   │  ├─ commit.md
+   │  ├─ pr.md
+   │  ├─ branch.md
+   │  └─ worktree.md
    ├─ languages/
    ├─ architectures/
    ├─ frameworks/
@@ -42,8 +59,17 @@
    └─ runtime/
 ```
 
-AI agent가 단일 파일만 읽을 때는 `styleguide.md`를 사용하고, 코드 리뷰와 변경 이력에서는
-`standards/**`의 개별 파일을 사용합니다. 두 산출물은 같은 선택 목록에서 생성됩니다.
+`styleguide.md`와 `standards/**`는 같은 선택 목록에서 생성됩니다. `merge-dev-standards`는
+`AGENTS.md`에 개별 원본의 읽기 조건과 경로를 병합하여, agent가 작업에 필요한 문서만
+읽도록 합니다. 전체 병합본은 기존 통합과 Gemini Code Assist용으로 유지합니다.
+
+세 agent의 skill 배포본은 모두 같은 이름 `merge-dev-standards`와 같은 내용을 사용하며,
+어느 client에서 실행하든 기본적으로 세 agent의 규칙을 모두 병합합니다.
+배포본은 선택한 언어와 관계없이 `--output` 파일과 같은 디렉터리 아래에
+생성됩니다. 기본 경로는 `.dev-standards/{codex,claude,gemini}/skills/`이며, 재조합하면
+배포본을 갱신합니다. `templates/agent-skills/`가 없는 외부 source는 경고 후 skill 생성을
+생략합니다. 기존 agent 설정이나 native skill 경로는 compose가 수정하지 않습니다.
+설치 및 병합 방법은 [agent skill 적용](agent-skills.md)을 참고합니다.
 
 ## GitHub Actions 동기화
 
@@ -57,7 +83,7 @@ AI agent가 단일 파일만 읽을 때는 `styleguide.md`를 사용하고, 코�
    갱신합니다.
 
 상시 동기화는 `.dev-standards/styleguide.md`, `.dev-standards/standards/**`, 상태 파일과 선택한
-Gemini 병합본만 관리합니다. `.dev-standards/config.yml`과 bootstrap 이후 설정 파일은 소비
+Gemini 병합본, 세 agent의 skill 배포본을 관리합니다. `.dev-standards/config.yml`과 bootstrap 이후 설정 파일은 소비
 저장소가 소유합니다.
 
 기존 `.dev-standards.yml`과 `.dev-standards/guide.md` 구조에서 전환한다면

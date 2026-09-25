@@ -117,13 +117,19 @@ with:
 
 ### 3. 에이전트 지침 링크 수정
 
-`AGENTS.md`에서 이전 `guide.md` 링크를 병합된 `styleguide.md`로 변경합니다.
+`AGENTS.md`에서 이전 `guide.md` 또는 통합 `styleguide.md` 전체 읽기 지침을
+작업별 원본 문서 안내로 변경합니다. `merge-dev-standards`를 실행하면 실제 배포된
+파일과 읽기 조건을 관리 구간에 병합할 수 있습니다.
 
 ```markdown
 ## Shared Development Standards
 
-Before modifying code, read `.dev-standards/styleguide.md`.
-Repository-specific instructions in this file take precedence over the shared styleguide.
+Read only the original guides relevant to the task under `.dev-standards/standards/`.
+Read `base.md` before code changes when present. Select the applicable guides from
+`languages/`, `architectures/`, `frameworks/`, `build-tools/`, `tools/`, and `runtime/`
+according to the affected module and task. Read only files that exist.
+Do not load every guide or the merged styleguide by default.
+Repository-specific instructions take precedence over shared guides.
 ```
 
 `CLAUDE.md`는 병합본을 중복 참조하지 않고 `AGENTS.md`만 참조합니다.

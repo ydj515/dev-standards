@@ -27,7 +27,7 @@ runtimes:
 | 필드 | 설명 |
 | --- | --- |
 | `version` | 설정 schema 버전 |
-| `base` | 공통 개발 원칙 포함 여부. 생략하면 `true` |
+| `base` | 공통 개발 원칙과 commit·PR 가이드 포함 여부. 생략하면 `true` |
 | `languages` | 언어별 타입, 오류 처리와 생태계 관용구 |
 | `architectures` | package 구조와 의존 방향 profile |
 | `frameworks` | framework 실행 모델과 구조 적용 기준 |
@@ -37,6 +37,11 @@ runtimes:
 
 배열은 block 또는 inline 형식을 지원하며 선언 순서대로 조합합니다. `architectures` 이외의
 배열은 생략하거나 `[]`로 두면 해당 계층을 조합하지 않습니다.
+
+`base`가 활성화되면 `base.md`와 `workflows/`의 `commit.md`, `pr.md`, `branch.md`,
+`worktree.md`를 함께 배포합니다. `base: false`이면 다섯 문서를 모두 제외합니다.
+`AGENTS.md`는 작업 시작·브랜치 선택 시 branch 가이드, 격리 작업 시 worktree 가이드,
+메시지 작성 시 commit·PR 가이드를 읽도록 안내합니다.
 
 ## Architecture 선택
 
