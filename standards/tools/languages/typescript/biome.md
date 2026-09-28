@@ -6,6 +6,8 @@
 - `@biomejs/biome`은 exact devDependency와 lockfile로 버전을 고정합니다. patch release도
   출력 차이를 만들 수 있으므로 floating range를 사용하지 않습니다.
 - 저장소 루트의 `biome.json`을 설정 원본으로 사용하고 Git ignore 파일을 존중합니다.
+- 현재 템플릿은 `.editorconfig`를 읽지 않습니다. 연동이 필요하면
+  `formatter.useEditorconfig: true`를 명시하며, 같은 옵션은 `biome.json` 값이 우선합니다.
 - `formatter`, recommended `linter`, `assist/source/organizeImports`를 같은 설정에서
   관리합니다.
 - 시작점은 `templates/biome/biome.json.example`이며 설치된 package의 schema를 참조합니다.

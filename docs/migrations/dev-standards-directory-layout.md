@@ -32,9 +32,11 @@ consumer-repository/
 ```
 
 - `config.yml`은 소비 저장소가 작성하고 소유합니다.
-- `styleguide.md`는 선택된 문서를 합친 단일 AI 도구 진입점입니다.
+- `styleguide.md`는 선택된 문서를 합친 기존 통합용 병합본입니다. agent 지침은 `AGENTS.md`에서
+  작업별 원본 문서를 안내합니다.
 - `standards/**`는 같은 선택 결과를 원본 계층대로 복사한 생성물입니다.
-- `.gemini/styleguide.md`를 사용하는 경우 병합본과 같은 내용으로 유지됩니다.
+- skill을 포함한 표준 버전에서는 `.dev-standards/{codex,claude,gemini}/skills/`도 생성됩니다.
+- 기존 `.gemini/styleguide.md`는 보존하지만 갱신하지 않습니다. `sync_gemini` 입력은 무시합니다.
 - React와 Spring의 소스 및 package 디렉터리는 이 마이그레이션에서 변경하지 않습니다.
 
 ## 사전 확인
@@ -158,7 +160,12 @@ Repository-specific instructions take precedence over shared guides.
 - `.dev-standards/styleguide.md` 생성
 - 선택된 `.dev-standards/standards/**` 생성
 - 기존 `.dev-standards/guide.md` 삭제
-- `sync_gemini`이 활성화된 경우 `.gemini/styleguide.md` 갱신
+- skill을 포함한 표준 버전의 세 agent skill 배포본 생성
+- `.dev-standards/lock.json`에 적용 버전과 관리 파일 상태 기록
+
+기존 `.gemini/` 파일은 수정·삭제하지 않으며 새 lock의 관리 대상에서 제외합니다.
+소비 workflow가 이전 `ci-workflows` ref를 사용하면 `uses`도 갱신해야 합니다.
+`standards_ref`만 변경하면 workflow 구현은 바뀌지 않습니다.
 
 `bootstrap_templates`는 이 경로 마이그레이션에 필요하지 않습니다. 기존 프로젝트 설정을
 유지하려면 비활성화된 기본값을 사용합니다. 실제 설정 파일을 최초 채택하는 별도 작업에서만
@@ -175,11 +182,9 @@ test -d .dev-standards/standards
 test ! -e .dev-standards/guide.md
 ```
 
-Gemini 동기화를 사용하는 저장소는 두 병합본이 같은지도 확인합니다.
-
-```sh
-cmp .dev-standards/styleguide.md .gemini/styleguide.md
-```
+기존 `.gemini/styleguide.md`와 새 병합본의 내용 일치는 검증 조건이 아닙니다.
+기존 복사본의 사용 여부는
+[Gemini 복사본 전환 안내](https://github.com/ydj515/ci-workflows/blob/main/docs/sync-dev-standards.md#기존-gemini-복사본-전환)에 따라 확인합니다.
 
 선택 결과와 개별 파일을 확인합니다.
 

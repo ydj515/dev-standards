@@ -17,8 +17,10 @@
 ## 실행과 예외
 
 - `pyright`를 CI와 `mise run verify`에 포함하고 IDE 진단과 동일한 설정 파일을 사용합니다.
-- `# type: ignore`는 구체적인 진단 rule과 이유를 기록하고 외부 library의 type stub 문제는
-  가능한 경우 stub package 또는 local stub으로 해결합니다.
+- 규칙별 억제는 `# pyright: ignore[reportRuleName]` 형식으로 실제 진단 rule과 이유를
+  기록합니다. `# type: ignore`는 Pyright rule 이름으로 범위를 제한하지 못하므로 대체하지
+  않습니다. 외부 library의 type stub 문제는 가능한 경우 stub package 또는 local stub으로
+  해결합니다.
 - type check 성공은 runtime validation을 대체하지 않습니다.
 
 ```sh
@@ -26,5 +28,6 @@ pyright
 ```
 
 설정과 CLI는 [Pyright configuration](https://github.com/microsoft/pyright/blob/main/docs/configuration.md)과
-[공식 설치 안내](https://github.com/microsoft/pyright/blob/main/docs/installation.md)를 기준으로
+[공식 설치 안내](https://github.com/microsoft/pyright/blob/main/docs/installation.md),
+[진단 억제 주석](https://github.com/microsoft/pyright/blob/main/docs/comments.md)을 기준으로
 합니다.

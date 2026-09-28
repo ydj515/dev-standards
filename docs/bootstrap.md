@@ -58,6 +58,29 @@ Framework별 ESLint preset은 기존 `eslint.config.mjs`에 병합해야 하므�
 복사하지 않습니다. mise bootstrap도 resolution 결과인 `mise.lock`을 만들지 않습니다.
 자리표시자를 확정한 뒤 소비 저장소에서 `mise lock`을 실행합니다.
 
+### .editorconfig와 도구별 설정
+
+하나 이상의 `languages`를 선택하면
+[`templates/editorconfig/.editorconfig`](../templates/editorconfig/.editorconfig)를 소비 저장소
+루트의 `.editorconfig`로 복사합니다. `compose.sh`나 기본 CI 동기화만으로는 복사하지 않으며,
+CI에서는 `bootstrap_templates: true`가 필요합니다. `--agents-only`는 이 파일을 복사하지 않습니다.
+
+`.editorconfig`는 공통 편집 규칙을 제공합니다. 린트와 포맷 실행 시 사용하는 설정은
+도구마다 다르며, 아래 표는 현재 배포 템플릿 기준입니다.
+
+| 도구 | 실제 기준 | `.editorconfig`와의 관계 |
+| --- | --- | --- |
+| Kotlin ktlint | `.editorconfig` + ktlint 기본 규칙 | 직접 사용하며 루트 파일에서 포맷 규칙을 관리합니다. [공식 문서](https://ktlint.github.io/ktlint/1.8.0/rules/configuration-ktlint/) |
+| Prettier | `prettier.config.mjs` 등 | 지원하는 속성을 읽지만 Prettier 설정에 명시한 값이 우선합니다. [공식 문서](https://prettier.io/docs/configuration#editorconfig) |
+| Biome | `biome.json` | `formatter.useEditorconfig: true`일 때 읽습니다. 현재 템플릿은 이 옵션을 지정하지 않아 읽지 않으며, 활성화해도 `biome.json` 값이 우선합니다. [공식 문서](https://biomejs.dev/reference/configuration/#formatteruseeditorconfig) |
+| ESLint | `eslint.config.mjs` | 현재 템플릿은 ESLint·TypeScript 규칙을 사용하며 `.editorconfig` 연동은 없습니다. |
+| Detekt / Checkstyle / PMD / SpotBugs | 각 도구의 YAML·XML 설정 및 기본 규칙 | 현재 배포 구성에서는 각 도구 설정이 기준입니다. |
+| Python Ruff | `ruff.toml` / `pyproject.toml` | 별도 설정이 기준입니다. [공식 문서](https://docs.astral.sh/ruff/configuration/) |
+
+공통 템플릿에는 기본 편집 규칙을 유지하고, 모든 도구에 `.editorconfig` 연동을 추가하지
+않습니다. 소비 저장소에서 들여쓰기나 줄바꿈을 바꿀 때는 사용 중인 포맷터 설정의 같은 값도
+맞춥니다. IDE와 포맷터 결과가 다르면 해당 도구의 설정과 우선순위를 확인합니다.
+
 ## 충돌과 소유권
 
 - 대상 파일이 없으면 복사합니다.
@@ -158,6 +181,8 @@ actual results and any checks you could not run.
 
 공유 표준 링크는 `AGENTS.md`에서만 관리합니다. 기존 `AGENTS.md`가 있다면 위 section을 직접
 병합합니다. 루트 `GEMINI.md`는 [Gemini CLI context import](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md)의
-진입점이고, `.gemini/styleguide.md`는 Gemini Code Assist용 병합 산출물입니다.
+진입점입니다. 이전 workflow가 생성한 `.gemini/styleguide.md`는 보존되지만 현재 CI의
+동기화 대상은 아닙니다. 전환 방법은
+[기존 Gemini 복사본 전환](https://github.com/ydj515/ci-workflows/blob/main/docs/sync-dev-standards.md#기존-gemini-복사본-전환)을 참고합니다.
 
 Bootstrap 회귀 검증은 `./scripts/test-bootstrap.sh`로 실행합니다.

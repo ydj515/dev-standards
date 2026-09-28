@@ -19,6 +19,9 @@ dependency-cruiser는 전체 module graph의 계층 역전, 순환 의존과 해
 ## 설정과 경계
 
 - dependency-cruiser를 exact devDependency와 lockfile에 고정합니다.
+- Node.js와 TypeScript 버전이 분석기의 지원 범위에 포함되는지 `depcruise --info`로
+  확인합니다. 분석 대상 source가 있는데 module이 0개이면 최초 연결 검증을 성공으로
+  처리하지 않고 source 경로, filter와 TypeScript 지원 여부를 확인합니다.
 - 시작점은 `templates/dependency-cruiser/react-ts/.dependency-cruiser.cjs.example`입니다.
   bootstrap 이후 실제 `src/` 구조, alias와 application `tsconfig` 경로에 맞게 조정합니다.
 - React의 기본 `feature-sliced` profile에서는
@@ -36,18 +39,19 @@ dependency-cruiser는 전체 module graph의 계층 역전, 순환 의존과 해
 ```json
 {
   "scripts": {
-    "imports:check": "depcruise src"
+    "imports:check": "depcruise --config .dependency-cruiser.cjs src"
   }
 }
 ```
 
 ```sh
-pnpm exec depcruise src
+pnpm exec depcruise --config .dependency-cruiser.cjs src
 ```
 
 CI에서는 lint와 typecheck 뒤, test와 build 전에 실행합니다. architecture profile 또는 source
 root가 바뀌면 정상 import와 각 금지 방향을 나타내는 작은 fixture를 함께 갱신합니다.
 
 참고: [dependency-cruiser rules](https://github.com/sverweij/dependency-cruiser/blob/main/doc/rules-reference.md),
+[dependency-cruiser CLI](https://github.com/sverweij/dependency-cruiser/blob/main/doc/cli.md),
 [ESLint Plugin Boundaries](https://www.jsboundaries.dev/docs/rules/),
 [Nx module boundaries](https://nx.dev/docs/features/enforce-module-boundaries)

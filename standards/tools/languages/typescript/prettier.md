@@ -5,6 +5,8 @@
 - Prettier는 `package.json`의 exact devDependency와 lockfile로 버전을 고정합니다.
 - 저장소 루트의 `prettier.config.mjs`를 설정 원본으로 사용하고 전역 설정에 의존하지
   않습니다.
+- `.editorconfig`의 지원 속성도 읽지만 Prettier 설정에 명시한 값이 우선합니다.
+  들여쓰기와 줄바꿈을 변경하면 두 파일의 같은 값도 맞춥니다.
 - lint는 ESLint, format은 Prettier로 역할을 분리하며 style rule을 두 도구에 중복
   선언하지 않습니다.
 - `templates/prettier/prettier.config.mjs.example`과 `.prettierignore.example`을 복사한 뒤

@@ -8,7 +8,8 @@
 
 - 규칙 파일을 저장소에 커밋하고 build 설정에서 경로를 명시합니다.
 - Gradle의 기본 경로를 따르면 `config/checkstyle/checkstyle.xml`을 사용합니다.
-- Checkstyle tool 버전과 Gradle 또는 Maven plugin 버전을 프로젝트가 고정합니다.
+- Checkstyle tool 버전을 고정합니다. Gradle core plugin 버전은 Wrapper의 Gradle 버전을
+  따르며, Maven plugin 버전은 POM에서 별도로 고정합니다.
 - formatter가 자동 수정하는 영역과 Checkstyle이 실패시키는 영역의 소유권을 나눠
   같은 형식을 서로 다른 규칙으로 중복 강제하지 않습니다.
 - 기본 설정은 `templates/checkstyle/checkstyle.xml`에서 시작하고 프로젝트 규약에
@@ -48,3 +49,5 @@
 ./mvnw checkstyle:check
 ./mvnw verify
 ```
+
+참고: [Gradle Checkstyle plugin](https://docs.gradle.org/current/userguide/checkstyle_plugin.html)

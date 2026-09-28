@@ -166,7 +166,7 @@ Compose/CI는 배포본만 갱신하고, 실제 설정 병합은 skill을 실행
 목록 갱신 전에도 해당 분류의 실제 파일을 확인하도록 안내합니다. 이전의 styleguide 전체
 읽기 지침은 소유권이 명확한 관리 구간에서 이 안내로 교체합니다.
 
-`styleguide.md` 생성과 Gemini Code Assist용 병합본은 기존 호환성을 위해 유지합니다.
+`.dev-standards/styleguide.md` 생성은 기존 통합과의 호환성을 위해 유지합니다.
 bootstrap은 작업별 폴더 안내를 생성하며, 스킬은 이를 실제 파일별 안내로 구체화합니다.
 
 이전 `apply-dev-standards-*` 이름의 skill이 이미 설치되어 있다면 자동 삭제하지 않고
@@ -180,4 +180,6 @@ bootstrap은 작업별 폴더 안내를 생성하며, 스킬은 이를 실제 �
 - [Gemini CLI skills](https://geminicli.com/docs/cli/skills/)와
   [context import](https://geminicli.com/docs/cli/gemini-md/): `.gemini/skills/`, `GEMINI.md`.
 
-Gemini Code Assist용 `.gemini/styleguide.md`는 기존 CI 옵션의 별도 산출물입니다.
+이전 workflow가 생성한 Gemini Code Assist용 `.gemini/styleguide.md`는 현재 CI에서
+수정·삭제하지 않습니다. `sync_gemini` 입력도 무시합니다. 전환 방법은
+[기존 Gemini 복사본 전환](https://github.com/ydj515/ci-workflows/blob/main/docs/sync-dev-standards.md#기존-gemini-복사본-전환)을 참고합니다.

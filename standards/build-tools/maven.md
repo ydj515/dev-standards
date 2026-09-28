@@ -50,6 +50,10 @@
 dependency를 포함합니다. Kotlin 중심 Gradle 전용 coverage인 Kover는 Maven build에 추가하지
 않습니다.
 
+bootstrap은 기존 `pom.xml`을 병합하지 않습니다. 기존 POM이 있으면 선택한 도구의 plugin과
+execution만 직접 병합합니다. 예시에는 여러 품질 도구가 포함되므로 config에서 도구를
+선택했다고 POM의 plugin 목록이 자동으로 필터링되는 것은 아닙니다.
+
 ## Multi-module 구조
 
 - aggregator root는 `packaging`을 `pom`으로 두고 module 목록과 공통 관리를 소유합니다.
@@ -65,6 +69,9 @@ dependency를 포함합니다. Kotlin 중심 Gradle 전용 coverage인 Kover는 
   명시적으로 연결합니다.
 - 테스트는 `test`, 통합 테스트와 정적 분석을 포함한 전체 검증은 `verify` lifecycle에
   연결합니다.
+- `verify` 호출만으로 통합 테스트가 자동 등록되지는 않습니다. 별도 통합 테스트를
+  Failsafe로 운영하면 `integration-test`와 `verify` goal을 모두 연결하고 테스트 검색
+  패턴을 확인합니다. 현재 POM template은 Failsafe 설정을 포함하지 않습니다.
 - CI에서 `-DskipTests` 또는 `-Dmaven.test.skip=true`로 필수 검증을 우회하지 않습니다.
 - dependency 충돌은 실제 resolution 결과와 effective POM을 함께 확인합니다.
 - 모듈 의존 문서는 활성 profile의 reactor와 실제 의존 그래프에 대조하고 `verify`에
@@ -82,6 +89,7 @@ dependency를 포함합니다. Kotlin 중심 Gradle 전용 coverage인 Kover는 
   실행하고 dependency 및 plugin resolution 차이를 검토합니다.
 
 참고: [Maven Wrapper checksum verification](https://maven.apache.org/tools/wrapper/),
-[Maven Reproducible Builds](https://maven.apache.org/guides/mini/guide-reproducible-builds.html)
+[Maven Reproducible Builds](https://maven.apache.org/guides/mini/guide-reproducible-builds.html),
+[Maven Failsafe usage](https://maven.apache.org/surefire/maven-failsafe-plugin/usage.html)
 
 버전별 설정 참고: [Maven Compiler Plugin](https://maven.apache.org/plugins/maven-compiler-plugin/)

@@ -29,3 +29,14 @@ tools/
 - 여러 도구가 같은 설정 파일을 수정해야 하면 독립 bootstrap 템플릿을 중복 제공하지
   않습니다. 언어 도구의 설정을 기준으로 framework preset을 수동 병합하고 최종 파일은
   소비 저장소가 소유합니다.
+
+## 가이드와 실행 설정
+
+`tools` 선택은 도구 가이드를 배포합니다. 도구 설치, dependency 추가와 build task 연결은
+소비 저장소에서 수행하며, bootstrap도 지원하는 설정 파일의 시작점만 복사합니다.
+Gradle Kotlin DSL 예시는 기존 build에 직접 병합합니다.
+
+`.editorconfig`는 공통 편집 규칙이고 실제 lint와 format 설정은 도구마다 다릅니다.
+복사 조건과 설정 우선순위는
+[`.editorconfig와 도구별 설정`](../../docs/bootstrap.md#editorconfig와-도구별-설정)에 정리합니다.
+CI에는 파일을 수정하지 않는 검사 명령을 연결하고 자동 수정 명령은 별도로 실행합니다.

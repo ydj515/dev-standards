@@ -16,8 +16,7 @@
   CI secret이나 승인된 secret manager에서 환경변수로 주입합니다.
 - dependency 추가와 upgrade는 `pnpm add` 또는 `pnpm update`로 명시적으로 수행하고
   `package.json`과 `pnpm-lock.yaml`을 함께 검토합니다.
-- lifecycle script 실행 정책과 registry 인증은 프로젝트 보안 정책에 맞게 별도로
-  관리하며 token을 `.npmrc`에 기록하지 않습니다.
+- lifecycle script 실행 정책은 프로젝트 보안 정책에 맞게 별도로 관리합니다.
 
 ```json
 {

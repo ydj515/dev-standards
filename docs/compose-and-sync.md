@@ -61,7 +61,7 @@
 
 `styleguide.md`와 `standards/**`는 같은 선택 목록에서 생성됩니다. `merge-dev-standards`는
 `AGENTS.md`에 개별 원본의 읽기 조건과 경로를 병합하여, agent가 작업에 필요한 문서만
-읽도록 합니다. 전체 병합본은 기존 통합과 Gemini Code Assist용으로 유지합니다.
+읽도록 합니다. 전체 병합본은 기존 통합용으로 유지합니다.
 
 세 agent의 skill 배포본은 모두 같은 이름 `merge-dev-standards`와 같은 내용을 사용하며,
 어느 client에서 실행하든 기본적으로 세 agent의 규칙을 모두 병합합니다.
@@ -82,9 +82,10 @@
 4. 변경이 있으면 `automation/dev-standards-sync` branch의 pull request를 생성하거나
    갱신합니다.
 
-상시 동기화는 `.dev-standards/styleguide.md`, `.dev-standards/standards/**`, 상태 파일과 선택한
-Gemini 병합본, 세 agent의 skill 배포본을 관리합니다. `.dev-standards/config.yml`과 bootstrap 이후 설정 파일은 소비
-저장소가 소유합니다.
+상시 동기화는 `.dev-standards/styleguide.md`, `.dev-standards/standards/**`, 상태 파일과 세
+agent의 skill 배포본을 관리합니다. `.dev-standards/config.yml`과 bootstrap 이후 설정 파일은
+소비 저장소가 소유합니다. 기존 `.gemini/styleguide.md`는 보존하지만 갱신하지 않으며,
+`sync_gemini` 입력은 호환용으로만 유지하고 무시합니다.
 
 기존 `.dev-standards.yml`과 `.dev-standards/guide.md` 구조에서 전환한다면
 [디렉터리 구조 마이그레이션](migrations/dev-standards-directory-layout.md)을 따릅니다.
