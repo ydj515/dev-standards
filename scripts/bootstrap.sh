@@ -299,6 +299,12 @@ if "mise" in runtimes:
         f"runtimes:mise ({selected_mise_profile})",
     )
 
+    for filename in ("mise.dev.toml", "mise.prod.toml"):
+        add_template(f"mise/common/{filename}.example", filename, "runtimes:mise (environment)")
+    # Keep personal configuration and ignore rules inactive until explicitly adopted.
+    add_template("mise/common/mise.dev.local.toml.example", "mise.dev.local.toml.example", "runtimes:mise (local example)")
+    add_template("mise/common/gitignore.example", "mise.gitignore.example", "runtimes:mise (ignore example)")
+
 conflicts = []
 states = []
 for source, target_relative, selected_by, existing_policy in plan:

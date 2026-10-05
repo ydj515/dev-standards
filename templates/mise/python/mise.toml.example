@@ -12,6 +12,7 @@ node = "REPLACE_ME"
 "npm:pyright" = "REPLACE_ME"
 
 [env]
+APP_ENV = "local"
 UV_PYTHON = { value = "{{ tools.python.path }}", tools = true }
 
 [settings]
@@ -39,4 +40,5 @@ depends = ["sync"]
 run = "uv run --frozen pytest"
 
 [tasks.verify]
+alias = "ci"
 depends = ["format-check", "lint", "typecheck", "test"]

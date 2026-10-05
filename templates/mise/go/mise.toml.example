@@ -6,6 +6,9 @@ min_version = "REPLACE_ME"
 go = "REPLACE_ME"
 golangci-lint = "REPLACE_ME"
 
+[env]
+APP_ENV = "local"
+
 [settings]
 lockfile = true
 
@@ -22,4 +25,5 @@ run = "go test ./..."
 run = "go test -race ./..."
 
 [tasks.verify]
+alias = "ci"
 depends = ["lint", "test"]

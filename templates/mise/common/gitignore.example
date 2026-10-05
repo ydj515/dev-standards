@@ -1,0 +1,11 @@
+# Merge into the consuming repository's existing .gitignore.
+mise.local.toml
+mise.*.local.toml
+mise.local.lock
+mise.*.local.lock
+.miserc.local.toml
+.env
+.env.*
+!.env.example
+!.env.*.example
+# Commit mise.lock and any shared mise.<env>.lock files.

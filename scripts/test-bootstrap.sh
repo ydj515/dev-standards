@@ -229,6 +229,18 @@ cmp -s "${ambiguous_dir}/mise.toml" "${SOURCE_DIR}/templates/mise/gradle/mise.to
   fail "explicit mise profile should select the matching template"
 assert_absent "${ambiguous_dir}/src"
 
+env_conflict_dir="${TEST_ROOT}/env-conflict"
+mkdir -p "${env_conflict_dir}"
+printf 'runtimes: [mise]\n' > "${env_conflict_dir}/config.yml"
+printf 'APP_ENV = "project-owned"\n' > "${env_conflict_dir}/mise.prod.toml"
+if run_bootstrap --config "${env_conflict_dir}/config.yml" --target "${env_conflict_dir}" --mise-profile gradle; then
+  fail "existing environment config should stop the entire bootstrap"
+fi
+assert_absent "${env_conflict_dir}/mise.toml"
+assert_absent "${env_conflict_dir}/mise.dev.toml"
+assert_absent "${env_conflict_dir}/AGENTS.md"
+grep -Fxq 'APP_ENV = "project-owned"' "${env_conflict_dir}/mise.prod.toml" || fail "environment config was overwritten"
+
 dry_run_dir="${TEST_ROOT}/dry-run"
 mkdir -p "${dry_run_dir}/.dev-standards"
 cat > "${dry_run_dir}/.dev-standards/config.yml" <<'YAML'
@@ -246,6 +258,10 @@ assert_absent "${dry_run_dir}/.editorconfig"
 assert_absent "${dry_run_dir}/ruff.toml"
 assert_absent "${dry_run_dir}/pyrightconfig.json"
 assert_absent "${dry_run_dir}/mise.toml"
+assert_absent "${dry_run_dir}/mise.dev.toml"
+assert_absent "${dry_run_dir}/mise.prod.toml"
+assert_absent "${dry_run_dir}/mise.dev.local.toml.example"
+assert_absent "${dry_run_dir}/mise.gitignore.example"
 assert_absent "${dry_run_dir}/AGENTS.md"
 assert_absent "${dry_run_dir}/CLAUDE.md"
 assert_absent "${dry_run_dir}/GEMINI.md"

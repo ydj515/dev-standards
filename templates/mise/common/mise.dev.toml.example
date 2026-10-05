@@ -1,0 +1,4 @@
+# Shared development environment. Select explicitly with mise -E dev.
+# Keep tool versions in mise.toml unless this environment needs different tools.
+[env]
+APP_ENV = "dev"

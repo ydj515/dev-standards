@@ -9,11 +9,14 @@ min_version = "REPLACE_ME"
 node = "REPLACE_ME"
 pnpm = "REPLACE_ME"
 
+[env]
+APP_ENV = "local"
+
 [settings]
 lockfile = true
 
 [tasks.install]
-run = "pnpm install --frozen-lockfile"
+run = "pnpm install --frozen-lockfile --prod=false"
 
 [tasks.lint]
 run = "pnpm run lint"
@@ -34,5 +37,6 @@ run = "pnpm run test"
 run = "pnpm run build"
 
 [tasks.verify]
+alias = "ci"
 depends = ["install"]
 run = "pnpm run verify"

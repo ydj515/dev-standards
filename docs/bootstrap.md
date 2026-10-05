@@ -29,7 +29,16 @@
   --mise-profile typescript
 ```
 
-지원 profile은 `gradle`, `maven`, `go`, `python`, `typescript`입니다.
+지원 profile은 `gradle`, `maven`, `go`, `python`, `typescript`입니다. profile은
+도구와 품질 검증 기준만 선택합니다. frontend/backend/infra 구성의 실행 task는 선택한
+profile의 `mise.toml`에 프로젝트가 직접 병합합니다. bootstrap은 애플리케이션 소스나
+Compose 파일을 생성하지 않습니다.
+
+mise 선택 시 `mise.toml`, `mise.dev.toml`, `mise.prod.toml`과 개인 설정/ignore 채택용
+`mise.dev.local.toml.example`, `mise.gitignore.example`을 복사합니다. 기존 환경 설정도
+내용이 다르면 덮어쓰지 않고 사전에 실패합니다. local 실행은 `-E` 없는 기본 환경,
+공유 환경은 `mise -E dev ...`와 `mise -E prod ...`로 선택합니다.
+`mise.gitignore.example`은 기존 `.gitignore`에 직접 병합해야 합니다.
 
 ## 생성 파일
 
@@ -52,7 +61,7 @@
 | `tools: [ruff]` | `ruff.toml` |
 | `tools: [pyright]` | `pyrightconfig.json` |
 | `tools: [frameworks/react-ts/vitest]` | `vitest.config.ts` |
-| `runtimes: [mise]` | `mise.toml` |
+| `runtimes: [mise]` | `mise.toml`, `mise.dev.toml`, `mise.prod.toml`, `mise.dev.local.toml.example`, `mise.gitignore.example` |
 
 Framework별 ESLint preset은 기존 `eslint.config.mjs`에 병합해야 하므로 별도 설정을 자동
 복사하지 않습니다. mise bootstrap도 resolution 결과인 `mise.lock`을 만들지 않습니다.
@@ -186,3 +195,7 @@ actual results and any checks you could not run.
 [기존 Gemini 복사본 전환](https://github.com/ydj515/ci-workflows/blob/main/docs/sync-dev-standards.md#기존-gemini-복사본-전환)을 참고합니다.
 
 Bootstrap 회귀 검증은 `./scripts/test-bootstrap.sh`로 실행합니다.
+mise 템플릿은 Python 3.11+와 mise 2026.9.18 이상이 준비된 환경에서
+`python3 scripts/test-mise.py`로 추가 검증합니다. 임시 설정에서 실제 mise를 실행하고
+도구 설치는 생략하며 Docker·Gradle·pnpm 대역으로 환경 선택, task 순서와 실패 전파를
+검사합니다. 실제 앱의 빌드·컨테이너 healthcheck 검증은 소비 저장소에서 별도로 수행합니다.

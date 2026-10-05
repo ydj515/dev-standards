@@ -1,0 +1,7 @@
+# Production configuration selection is not deployment authorization.
+# Inject secrets through the deployment system; do not load developer dotenv files here.
+[env]
+APP_ENV = "prod"
+
+# Add the variables required by this application, for example:
+# DATABASE_URL = { required = true, redact = true }
