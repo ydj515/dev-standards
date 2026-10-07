@@ -6,8 +6,6 @@ Spotless 또는 ktlint, 일반 정적 분석은 Detekt가 담당합니다.
 
 ## 의존성과 범위
 
-- `tools: [konsist]`로 명시적으로 선택합니다. Kotlin 언어 선택만으로 Konsist를 자동
-  추가하지 않습니다.
 - `com.lemonappdev:konsist` version을 test dependency와 version catalog에서 고정합니다.
 - JUnit 또는 Kotest 중 저장소가 사용하는 test engine과 맞추고, Konsist test가 표준 `test`
   또는 별도 architecture test task에 실제 연결되는지 확인합니다.

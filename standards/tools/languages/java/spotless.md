@@ -6,8 +6,6 @@
 
 ## 선택과 설정
 
-- `tools: [spotless]`로 명시적으로 선택합니다. `languages: [java]` 또는
-  `languages: [kotlin]`만 선택해도 Spotless를 자동 추가하지 않습니다.
 - Gradle plugin `com.diffplug.spotless` 버전을 version catalog와 lock 정책으로 고정합니다.
 - Java는 `googleJavaFormat`, `palantirJavaFormat` 또는 저장소가 선택한 formatter 하나를
   고정하고, Kotlin은 `ktfmt` 또는 `ktlint` 중 Spotless가 호출할 formatter의 소유권을
