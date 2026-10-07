@@ -1,0 +1,20 @@
+plugins {
+    alias(libs.plugins.spotless)
+}
+
+spotless {
+    java {
+        // Choose one formatter and pin its version in the consuming build.
+        googleJavaFormat()
+        target("src/**/*.java")
+    }
+    kotlin {
+        // Add this block only when Kotlin source is in the module.
+        ktlint()
+        target("src/**/*.kt")
+    }
+}
+
+tasks.named("check") {
+    dependsOn("spotlessCheck")
+}

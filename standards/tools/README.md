@@ -6,8 +6,8 @@
 tools/
 ├─ languages/
 │  ├─ go/golangci-lint.md
-│  ├─ java/{archunit,checkstyle,jacoco,pmd,spotbugs}.md
-│  ├─ kotlin/{detekt,kover,ktlint}.md
+│  ├─ java/{archunit,checkstyle,jacoco,pmd,spotbugs,spotless}.md
+│  ├─ kotlin/{detekt,konsist,kover,ktlint}.md
 │  ├─ python/{ruff,pyright}.md
 │  └─ typescript/{eslint,prettier,biome,pnpm}.md
 └─ frameworks/
@@ -26,6 +26,12 @@ tools/
   문서에서 책임과 적용 조건을 연결합니다.
 - JVM coverage는 `kover` 또는 `jacoco` 중 하나만 선택합니다. ArchUnit은 Java bytecode를
   분석하므로 Java와 Kotlin 양쪽에서 `archunit` selector를 사용할 수 있습니다.
+- `spotless`는 JVM source formatter이고 `konsist`는 Kotlin source architecture/consistency
+  test 도구입니다. 두 도구 모두 `tools`에 명시적으로 선택해야 하며 언어 선택만으로
+  자동 추가하지 않습니다.
+- Java architecture 검증은 `archunit`, Kotlin architecture·declaration 검증은 `konsist`를
+  사용할 수 있습니다. 두 도구는 같은 목적의 중복 규칙을 만들지 않도록 적용 범위를
+  나눕니다.
 - 여러 도구가 같은 설정 파일을 수정해야 하면 독립 bootstrap 템플릿을 중복 제공하지
   않습니다. 언어 도구의 설정을 기준으로 framework preset을 수동 병합하고 최종 파일은
   소비 저장소가 소유합니다.

@@ -67,6 +67,11 @@ Framework별 ESLint preset은 기존 `eslint.config.mjs`에 병합해야 하므�
 복사하지 않습니다. mise bootstrap도 resolution 결과인 `mise.lock`을 만들지 않습니다.
 자리표시자를 확정한 뒤 소비 저장소에서 `mise lock`을 실행합니다.
 
+Spotless와 Konsist는 독립 설정 파일이 아니라 Gradle plugin/dependency와 build task에
+병합하는 도구이므로 bootstrap이 별도 파일을 생성하지 않습니다. `tools: [spotless]`와
+`tools: [konsist]`를 선택하면 가이드와 Gradle version catalog 항목을 확인하고, 해당
+`templates/gradle/<tool>/build.gradle.kts.example` 내용을 기존 build에 직접 병합합니다.
+
 ### .editorconfig와 도구별 설정
 
 하나 이상의 `languages`를 선택하면
@@ -106,7 +111,7 @@ CI에서는 `bootstrap_templates: true`가 필요합니다. `--agents-only`는 �
 Bootstrap은 최초 채택을 위한 seed입니다. 복사 이후 파일, version 자리표시자와 프로젝트
 경로는 소비 저장소가 소유하고 검증합니다.
 
-Checkstyle, PMD, SpotBugs, Detekt, ktlint, ArchUnit, Kover와 JaCoCo의 build 연결 예시는
+Checkstyle, PMD, SpotBugs, Detekt, ktlint, ArchUnit, Konsist, Spotless, Kover와 JaCoCo의 build 연결 예시는
 `templates/gradle/<tool>/build.gradle.kts.example`에 있습니다. 이 파일들은 완성된 build를
 대체하지 않으므로 bootstrap이 자동 복사하지 않습니다. 선택한 예시의 plugin, dependency,
 task 설정만 기존 build에 병합합니다.

@@ -113,7 +113,8 @@ runtimes: [mise]
 - JVM coverage는 Kotlin 중심 프로젝트의 Kover 또는 범용 JaCoCo 중 하나만 선택합니다.
 - Next.js는 `frameworks/next-ts/eslint-config-next`를 선택하고 일반 TypeScript 규칙과 같은
   `eslint.config.mjs`에서 병합합니다.
-- Python의 기본 품질 조합은 `tools: [ruff, pyright]`입니다.
+- 현재 언어별 도구 기본값은 없습니다. Java 또는 Kotlin을 선택해도 ArchUnit이나 Konsist를
+  자동 추가하지 않으며, 필요한 도구를 `tools`에 명시합니다.
 
 Kotlin과 Java를 함께 사용하는 Spring/Gradle 프로젝트의 시작점은 다음과 같습니다.
 
@@ -121,7 +122,7 @@ Kotlin과 Java를 함께 사용하는 Spring/Gradle 프로젝트의 시작점은
 languages: [kotlin, java]
 frameworks: [spring]
 builds: [gradle]
-tools: [detekt, ktlint, checkstyle, pmd, spotbugs, archunit, kover]
+tools: [detekt, ktlint, checkstyle, pmd, spotbugs, archunit, konsist, spotless, kover]
 ```
 
 Java 중심이거나 기존 JaCoCo report pipeline을 유지해야 하면 `kover`만 `jacoco`로
@@ -138,5 +139,7 @@ Java/Kotlin과 React/TypeScript 도구는 다음 책임으로 대응합니다. �
 | Detekt / PMD | ESLint | 정적 분석, 코드 품질, 버그 패턴 탐지 |
 | Checkstyle / ktlint | ESLint + Prettier | 코딩 컨벤션 + 포맷팅 |
 | ArchUnit | dependency-cruiser / eslint-plugin-boundaries / Nx module boundaries | 아키텍처/레이어 의존성 검증 |
+| Konsist | dependency-cruiser / eslint-plugin-boundaries | Kotlin 선언·패키지·레이어 규칙 검증 |
+| Spotless | Prettier / Biome | JVM source formatting |
 | SpotBugs | ESLint + TypeScript compiler | 잠재 버그/타입 오류 |
 | JaCoCo / Kover | Vitest/Jest + V8/Istanbul coverage | 테스트 커버리지 |

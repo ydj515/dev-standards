@@ -37,7 +37,7 @@ for profile in gradle maven go python typescript; do
     fail "mise template should enable lockfile: ${profile}"
 done
 
-for tool in archunit detekt jacoco kover ktlint; do
+for tool in archunit detekt jacoco konsist kover ktlint spotless; do
   assert_file "${SOURCE_DIR}/templates/gradle/${tool}/build.gradle.kts.example"
 done
 
@@ -105,7 +105,7 @@ version: 1
 languages: [kotlin, java]
 frameworks: [spring]
 builds: [gradle]
-tools: [detekt, ktlint, kover, archunit, checkstyle, pmd, spotbugs]
+tools: [detekt, ktlint, konsist, kover, archunit, spotless, checkstyle, pmd, spotbugs]
 runtimes: [mise]
 YAML
 
@@ -127,6 +127,10 @@ grep -Fq 'kover = { id = "org.jetbrains.kotlinx.kover"' \
   "${spring_dir}/gradle/libs.versions.toml" || fail "Gradle catalog should include Kover"
 grep -Fq 'ktlint = { id = "org.jlleitschuh.gradle.ktlint"' \
   "${spring_dir}/gradle/libs.versions.toml" || fail "Gradle catalog should include ktlint"
+grep -Fq 'konsist = { module = "com.lemonappdev:konsist"' \
+  "${spring_dir}/gradle/libs.versions.toml" || fail "Gradle catalog should include Konsist"
+grep -Fq 'spotless = { id = "com.diffplug.spotless"' \
+  "${spring_dir}/gradle/libs.versions.toml" || fail "Gradle catalog should include Spotless"
 assert_absent "${spring_dir}/build.gradle.kts"
 assert_absent "${spring_dir}/src"
 

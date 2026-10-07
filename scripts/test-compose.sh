@@ -56,6 +56,8 @@ tools:
   - ktlint
   - kover
   - archunit
+  - konsist
+  - spotless
   - checkstyle
   - pmd
   - spotbugs
@@ -92,7 +94,9 @@ for relative_path in \
   tools/languages/kotlin/ktlint.md \
   tools/languages/kotlin/kover.md \
   tools/languages/java/archunit.md \
+  tools/languages/java/spotless.md \
   tools/languages/java/checkstyle.md \
+  tools/languages/kotlin/konsist.md \
   tools/languages/java/pmd.md \
   tools/languages/java/spotbugs.md \
   tools/languages/typescript/eslint.md \
