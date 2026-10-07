@@ -1,5 +1,10 @@
 dependencies {
     testImplementation(libs.konsist)
+    testImplementation(libs.junit.jupiter)
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 tasks.named("check") {

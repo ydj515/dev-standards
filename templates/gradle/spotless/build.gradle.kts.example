@@ -5,12 +5,12 @@ plugins {
 spotless {
     java {
         // Choose one formatter and pin its version in the consuming build.
-        googleJavaFormat()
+        googleJavaFormat(libs.versions.google.java.format.get())
         target("src/**/*.java")
     }
     kotlin {
         // Add this block only when Kotlin source is in the module.
-        ktlint()
+        ktlint(libs.versions.ktlint.get())
         target("src/**/*.kt")
     }
 }
